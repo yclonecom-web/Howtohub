@@ -19,7 +19,7 @@ const SAMPLE_CONTENT = [
     date: "2025-12-15",
     pinned: true,
     coverGradient: "linear-gradient(135deg, #1E3A8A 0%, #22D3EE 100%)",
-    coverIcon: "&#128187;",
+    coverIcon: "monitor",
     body: `
       <div class="step-block"><div class="step-number">Step 1 — Project Setup</div><p>Initialize your project with <code>npm init -y</code> and install dependencies: <code>npm install express mongoose dotenv cors helmet</code>. Create a clean folder structure with <code>/routes</code>, <code>/controllers</code>, <code>/models</code>, and <code>/middleware</code> directories.</p></div>
       <div class="step-block"><div class="step-number">Step 2 — Server Configuration</div><p>Create your <code>server.js</code> file. Set up Express with middleware for JSON parsing, CORS, and security headers using Helmet. Configure your MongoDB connection using Mongoose with proper error handling.</p></div>
@@ -46,7 +46,7 @@ const SAMPLE_CONTENT = [
     date: "2025-12-10",
     pinned: false,
     coverGradient: "linear-gradient(135deg, #9D174D 0%, #F9A8D4 100%)",
-    coverIcon: "&#127912;",
+    coverIcon: "palette",
     body: `
       <div class="step-block"><div class="step-number">Step 1 — Figma Basics</div><p>Get familiar with the Figma interface: the toolbar, layers panel, properties panel, and canvas. Learn keyboard shortcuts that will speed up your workflow by 10x.</p></div>
       <div class="step-block"><div class="step-number">Step 2 — Frames & Auto Layout</div><p>Understand frames vs groups. Master auto-layout for responsive components that resize automatically. Learn padding, spacing, and alignment controls.</p></div>
@@ -70,7 +70,7 @@ const SAMPLE_CONTENT = [
     date: "2025-12-08",
     pinned: false,
     coverGradient: "linear-gradient(135deg, #92400E 0%, #FCD34D 100%)",
-    coverIcon: "&#128296;",
+    coverIcon: "hammer",
     body: `
       <div class="step-block"><div class="step-number">Step 1 — Choose Your Space</div><p>Find a well-ventilated area with at least 200 sq ft. Ensure adequate electrical outlets (20A circuits), good lighting, and a concrete or sealed floor for easy cleanup.</p></div>
       <div class="step-block"><div class="step-number">Step 2 — Essential Power Tools</div><p>Start with the big five: table saw, miter saw, drill press, random orbital sander, and a router. Invest in quality — these tools will last decades with proper maintenance.</p></div>
@@ -96,7 +96,7 @@ const SAMPLE_CONTENT = [
     date: "2025-12-12",
     pinned: true,
     coverGradient: "linear-gradient(135deg, #065F46 0%, #6EE7B7 100%)",
-    coverIcon: "&#128202;",
+    coverIcon: "bar-chart-3",
     body: `
       <div class="step-block"><div class="step-number">Step 1 — Environment Setup</div><p>Install Python 3.10+ and create a virtual environment. Install pandas, numpy, matplotlib, and seaborn. Use Jupyter notebooks for interactive exploration.</p></div>
       <div class="step-block"><div class="step-number">Step 2 — DataFrames 101</div><p>Learn to create DataFrames from CSV, JSON, and SQL. Understand indexing with .loc and .iloc. Master selecting, filtering, and sorting data efficiently.</p></div>
@@ -121,7 +121,7 @@ const SAMPLE_CONTENT = [
     date: "2025-12-14",
     pinned: false,
     coverGradient: "linear-gradient(135deg, #991B1B 0%, #FCA5A5 100%)",
-    coverIcon: "&#127837;",
+    coverIcon: "utensils",
     body: `
       <div class="step-block"><div class="step-number">Step 1 — The Dough</div><p>Use 00 flour (or all-purpose), eggs, a pinch of salt, and a drizzle of olive oil. The ratio is 100g flour per egg. Knead for 10 minutes until smooth and elastic, then rest for 30 minutes.</p></div>
       <div class="step-block"><div class="step-number">Step 2 — Rolling & Cutting</div><p>Divide dough into portions. Roll each through a pasta machine, starting at the widest setting and gradually narrowing. For fettuccine, roll to setting 5 and cut into 6mm strips.</p></div>
@@ -145,7 +145,7 @@ const SAMPLE_CONTENT = [
     date: "2025-12-11",
     pinned: false,
     coverGradient: "linear-gradient(135deg, #3730A3 0%, #A5B4FC 100%)",
-    coverIcon: "&#128170;",
+    coverIcon: "dumbbell",
     body: `
       <div class="step-block"><div class="step-number">Week 1 — Foundation</div><p>Build the basics with push-ups (3x10), squats (3x15), lunges (3x10 each leg), planks (3x30s), and glute bridges (3x15). Focus on perfect form over speed.</p></div>
       <div class="step-block"><div class="step-number">Week 2 — Progression</div><p>Increase volume: push-ups (4x12), squats (4x20), add pike push-ups (3x8), jump squats (3x10), and extend plank holds to 45 seconds.</p></div>
@@ -169,7 +169,7 @@ const SAMPLE_CONTENT = [
     date: "2025-12-09",
     pinned: false,
     coverGradient: "linear-gradient(135deg, #047857 0%, #6EE7B7 100%)",
-    coverIcon: "&#128176;",
+    coverIcon: "wallet",
     body: `
       <div class="step-block"><div class="step-number">Step 1 — Track Your Spending</div><p>For one month, record every expense. Categorize spending into needs, wants, and savings. Use a simple spreadsheet or budgeting app. Awareness is the first step to control.</p></div>
       <div class="step-block"><div class="step-number">Step 2 — The 50/30/20 Budget</div><p>Allocate 50% of after-tax income to needs (housing, food, transport), 30% to wants (dining, entertainment, hobbies), and 20% to savings and debt repayment.</p></div>
@@ -194,7 +194,7 @@ const SAMPLE_CONTENT = [
     date: "2025-12-13",
     pinned: false,
     coverGradient: "linear-gradient(135deg, #1E3A8A 0%, #60A5FA 100%)",
-    coverIcon: "&#128444;",
+    coverIcon: "layout-grid",
     body: `
       <div class="step-block"><div class="step-number">Part 1 — Flexbox Fundamentals</div><p>Understand the flex container and flex items. Master justify-content, align-items, and flex-wrap. Learn when to use flex-grow, flex-shrink, and flex-basis for responsive sizing.</p></div>
       <div class="step-block"><div class="step-number">Part 2 — CSS Grid Basics</div><p>Define grid containers with grid-template-columns and grid-template-rows. Use fr units for flexible sizing. Place items with grid-column and grid-row properties.</p></div>
@@ -217,7 +217,7 @@ const SAMPLE_CONTENT = [
     date: "2025-12-06",
     pinned: false,
     coverGradient: "linear-gradient(135deg, #4338CA 0%, #22D3EE 100%)",
-    coverIcon: "&#127968;",
+    coverIcon: "home",
     body: `
       <div class="step-block"><div class="step-number">Step 1 — Planning Your Setup</div><p>Start small. Pick one room or one automation goal. Map out what you want to control (lights, temperature, security) and what triggers you want (time, motion, voice).</p></div>
       <div class="step-block"><div class="step-number">Step 2 — Raspberry Pi Hub</div><p>Install Home Assistant on a Raspberry Pi 4. This open-source platform supports thousands of devices and integrations. It runs locally, so your data stays private.</p></div>
@@ -241,7 +241,7 @@ const SAMPLE_CONTENT = [
     date: "2025-12-04",
     pinned: false,
     coverGradient: "linear-gradient(135deg, #7C3AED 0%, #DDD6FE 100%)",
-    coverIcon: "&#128247;",
+    coverIcon: "camera",
     body: `
       <div class="step-block"><div class="step-number">Technique 1 — Leading Lines</div><p>Use roads, fences, rivers, or architectural elements to guide the viewer's eye through your image. Leading lines create depth and draw attention to your subject.</p></div>
       <div class="step-block"><div class="step-number">Technique 2 — Frame Within a Frame</div><p>Use doorways, windows, arches, or natural elements like tree branches to frame your subject. This adds depth and context while focusing attention.</p></div>
@@ -400,7 +400,7 @@ class AppState {
     content.views = 0;
     content.date = new Date().toISOString().split('T')[0];
     content.coverGradient = `linear-gradient(135deg, hsl(${Math.random()*360}, 70%, 40%) 0%, hsl(${Math.random()*360}, 70%, 70%) 100%)`;
-    content.coverIcon = "&#128221;";
+    content.coverIcon = "file-text";
     this.userContent.unshift(content);
     this._save('howtohub_user_content', this.userContent);
     return content;
@@ -489,8 +489,8 @@ function renderContentCard(content, delay = 0) {
   return `
     <div class="content-card scroll-fade" style="animation-delay: ${delay * 0.08}s" onclick="openContent(${content.id})">
       <div class="card-cover" style="background: ${content.coverGradient}">
-        <div class="card-cover-placeholder">${content.coverIcon}</div>
-        ${content.pinned || state.isPinned(content.id) ? '<span class="card-pin-badge">&#128204; Pinned</span>' : ''}
+        <div class="card-cover-placeholder"><i data-lucide="${content.coverIcon}"></i></div>
+        ${content.pinned || state.isPinned(content.id) ? '<span class="card-pin-badge"><i data-lucide="pin"></i> Pinned</span>' : ''}
       </div>
       <div class="card-body">
         <div class="card-tags">
@@ -507,15 +507,15 @@ function renderContentCard(content, delay = 0) {
         </div>
         <div class="card-actions" onclick="event.stopPropagation()">
           <button class="card-action-btn ${isLiked ? 'liked' : ''}" onclick="handleLike(${content.id}, this)">
-            <span class="action-icon">${isLiked ? '&#10084;' : '&#9825;'}</span>
+            <span class="action-icon"><i data-lucide="heart"></i></span>
             <span class="like-count">${formatNumber(likeCount)}</span>
           </button>
           <button class="card-action-btn" onclick="openContent(${content.id})">
-            <span class="action-icon">&#128172;</span>
+            <span class="action-icon"><i data-lucide="message-circle"></i></span>
             <span>${commentCount}</span>
           </button>
           <button class="card-action-btn ${isSaved ? 'saved' : ''}" onclick="handleBookmark(${content.id}, this)">
-            <span class="action-icon">${isSaved ? '&#128278;' : '&#128278;'}</span>
+            <span class="action-icon"><i data-lucide="bookmark"></i></span>
             <span>${isSaved ? 'Saved' : 'Save'}</span>
           </button>
         </div>
@@ -531,7 +531,8 @@ function handleLike(contentId, btn) {
   const count = content.likes + (liked ? 1 : 0);
 
   btn.classList.toggle('liked', liked);
-  btn.querySelector('.action-icon').innerHTML = liked ? '&#10084;' : '&#9825;';
+  btn.querySelector('.action-icon').innerHTML = '<i data-lucide="heart"></i>';
+  refreshIcons();
   btn.querySelector('.like-count').textContent = formatNumber(count);
 
   showToast(liked ? 'Added to likes' : 'Removed from likes');
@@ -544,6 +545,7 @@ function handleBookmark(contentId, btn) {
   btn.querySelector('span:last-child').textContent = saved ? 'Saved' : 'Save';
 
   showToast(saved ? 'Saved to bookmarks' : 'Removed from bookmarks');
+  refreshIcons();
 }
 
 function openContent(contentId) {
@@ -604,7 +606,7 @@ function submitNewContent() {
     tags: tags ? [tags] : ['Education'],
     body: body ? `<p>${body.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>')}</p>` : '<p>Content coming soon...</p>',
     pinned: false,
-    coverIcon: '&#128221;'
+    coverIcon: 'file-text'
   });
 
   closeCreateModal();
@@ -638,10 +640,18 @@ function setActiveNav(page) {
   });
 }
 
+// --- Refresh Lucide Icons ---
+function refreshIcons() {
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+}
+
 // --- Init ---
 document.addEventListener('DOMContentLoaded', () => {
   state.applyTheme();
   setTimeout(initScrollFade, 100);
+  refreshIcons();
 });
 
 // --- Firebase (non-intrusive analytics) ---

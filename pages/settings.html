@@ -20,19 +20,19 @@
         <span>HowToHub</span>
       </a>
       <div class="nav-search">
-        <span class="search-icon">&#128269;</span>
+        <span class="search-icon"><i data-lucide="search"></i></span>
         <input type="text" placeholder="Search tutorials, manuals, users..." autocomplete="off">
         <div class="search-results"></div>
       </div>
       <div class="desktop-nav-links">
-        <a href="../index.html" class="desktop-nav-link" data-page="home">&#127968; Home</a>
-        <a href="bookmarks.html" class="desktop-nav-link" data-page="bookmarks">&#128278; Saved</a>
-        <a href="profile.html" class="desktop-nav-link" data-page="profile">&#128100; Profile</a>
-        <a href="settings.html" class="desktop-nav-link active" data-page="settings">&#9881; Settings</a>
+        <a href="../index.html" class="desktop-nav-link" data-page="home"><i data-lucide="home"></i> Home</a>
+        <a href="bookmarks.html" class="desktop-nav-link" data-page="bookmarks"><i data-lucide="bookmark"></i> Saved</a>
+        <a href="profile.html" class="desktop-nav-link" data-page="profile"><i data-lucide="user"></i> Profile</a>
+        <a href="settings.html" class="desktop-nav-link active" data-page="settings"><i data-lucide="settings"></i> Settings</a>
       </div>
       <div class="nav-actions">
-        <button class="nav-btn hide-mobile" onclick="toggleTheme()" title="Toggle theme">&#127763;</button>
-        <button class="nav-btn hide-mobile" title="Notifications">&#128276;<span class="badge"></span></button>
+        <button class="nav-btn hide-mobile" onclick="toggleTheme()" title="Toggle theme"><i data-lucide="moon"></i></button>
+        <button class="nav-btn hide-mobile" title="Notifications"><i data-lucide="bell"></i><span class="badge"></span></button>
         <a href="profile.html" class="nav-avatar">YU</a>
       </div>
     </div>
@@ -40,16 +40,16 @@
 
   <!-- Mobile Bottom Navigation -->
   <nav class="bottom-nav">
-    <a href="../index.html" data-page="home"><span class="nav-icon">&#127968;</span><span>Home</span></a>
-    <a href="bookmarks.html" data-page="bookmarks"><span class="nav-icon">&#128278;</span><span>Saved</span></a>
-    <a href="profile.html" data-page="profile"><span class="nav-icon">&#128100;</span><span>Profile</span></a>
-    <a href="settings.html" data-page="settings" class="active"><span class="nav-icon">&#9881;</span><span>Settings</span></a>
+    <a href="../index.html" data-page="home"><span class="nav-icon"><i data-lucide="home"></i></span><span>Home</span></a>
+    <a href="bookmarks.html" data-page="bookmarks"><span class="nav-icon"><i data-lucide="bookmark"></i></span><span>Saved</span></a>
+    <a href="profile.html" data-page="profile"><span class="nav-icon"><i data-lucide="user"></i></span><span>Profile</span></a>
+    <a href="settings.html" data-page="settings" class="active"><span class="nav-icon"><i data-lucide="settings"></i></span><span>Settings</span></a>
   </nav>
 
   <!-- Main Content -->
   <main class="container page-content">
     <div class="feed-header">
-      <h1>&#9881; Settings</h1>
+      <h1><i data-lucide="settings"></i> Settings</h1>
     </div>
 
     <div class="settings-container">
@@ -57,7 +57,7 @@
       <!-- Profile Settings -->
       <div class="settings-section">
         <h3>
-          <span class="section-icon">&#128100;</span>
+          <span class="section-icon"><i data-lucide="user"></i></span>
           Profile Settings
         </h3>
         <div class="setting-item">
@@ -79,7 +79,7 @@
       <!-- Appearance -->
       <div class="settings-section">
         <h3>
-          <span class="section-icon">&#127912;</span>
+          <span class="section-icon"><i data-lucide="palette"></i></span>
           Appearance
         </h3>
         <div class="setting-item">
@@ -97,7 +97,7 @@
       <!-- Notifications -->
       <div class="settings-section">
         <h3>
-          <span class="section-icon">&#128276;</span>
+          <span class="section-icon"><i data-lucide="bell"></i></span>
           Notifications
         </h3>
         <div class="setting-item">
@@ -135,7 +135,7 @@
       <!-- Privacy -->
       <div class="settings-section">
         <h3>
-          <span class="section-icon">&#128274;</span>
+          <span class="section-icon"><i data-lucide="lock"></i></span>
           Privacy
         </h3>
         <div class="setting-item">
@@ -163,7 +163,7 @@
       <!-- Help & Support -->
       <div class="settings-section">
         <h3>
-          <span class="section-icon">&#128172;</span>
+          <span class="section-icon"><i data-lucide="help-circle"></i></span>
           Help & Support
         </h3>
         <div class="setting-item">
@@ -192,7 +192,7 @@
       <!-- Download & Data -->
       <div class="settings-section">
         <h3>
-          <span class="section-icon">&#128190;</span>
+          <span class="section-icon"><i data-lucide="database"></i></span>
           Data & Downloads
         </h3>
         <div class="setting-item">
@@ -200,7 +200,7 @@
             <h4>Download User Manual</h4>
             <p>Get the HowToHub user guide as a PDF</p>
           </div>
-          <button class="setting-btn setting-btn-primary" onclick="downloadUserManual()">&#128196; Download</button>
+          <button class="setting-btn setting-btn-primary" onclick="downloadUserManual()"><i data-lucide="download"></i> Download</button>
         </div>
         <div class="setting-item">
           <div class="setting-info">
@@ -220,7 +220,7 @@
 
       <!-- About -->
       <div class="settings-section" style="text-align: center; padding: 32px;">
-        <div style="font-size: 36px; margin-bottom: 8px;">&#128218;</div>
+        <div class="settings-about-icon"><i data-lucide="book-open"></i></div>
         <h3 style="justify-content: center;">HowToHub</h3>
         <p class="caption" style="margin-top: 8px;">Version 1.0.0</p>
         <p class="caption">A premium manual library & social learning platform</p>
@@ -233,6 +233,7 @@
   <!-- Toast -->
   <div class="toast" id="toast"></div>
 
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
   <script src="../js/app.js"></script>
   <script src="../js/search.js"></script>
   <script src="../js/algorithm.js"></script>
@@ -367,6 +368,7 @@ Thank you for using HowToHub!
     document.addEventListener('DOMContentLoaded', () => {
       setActiveNav('settings');
       initSettingsToggles();
+      refreshIcons();
     });
   </script>
 </body>

@@ -1747,3 +1747,154 @@ h3 { font-size: 18px; font-weight: 600; line-height: 1.4; }
   color: var(--primary);
   font-weight: 600;
 }
+
+/* ============================================
+   Lucide Icon Integration
+   ============================================ */
+
+/* Base icon sizing */
+.lucide {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* Navigation icons */
+.desktop-nav-link .lucide,
+.nav-btn .lucide {
+  width: 18px;
+  height: 18px;
+}
+
+.nav-icon .lucide {
+  width: 22px;
+  height: 22px;
+}
+
+.search-icon .lucide {
+  width: 16px;
+  height: 16px;
+}
+
+/* Card action icons */
+.card-action-btn .lucide,
+.content-action-btn .lucide,
+.comment-action .lucide {
+  width: 16px;
+  height: 16px;
+}
+
+/* Liked heart fill */
+.card-action-btn.liked .lucide-heart,
+.content-action-btn.liked .lucide-heart {
+  fill: var(--danger);
+  color: var(--danger);
+}
+
+/* Saved bookmark fill */
+.card-action-btn.saved .lucide-bookmark,
+.content-action-btn.saved .lucide-bookmark {
+  fill: var(--accent);
+  color: var(--accent);
+}
+
+/* Cover / hero placeholder icons */
+.card-cover-placeholder .lucide,
+.content-hero-placeholder .lucide {
+  width: 48px;
+  height: 48px;
+  stroke-width: 1.5;
+  color: rgba(255,255,255,0.9);
+}
+
+/* Pin badge icon */
+.card-pin-badge .lucide {
+  width: 12px;
+  height: 12px;
+}
+
+/* Empty state icons */
+.empty-icon .lucide {
+  width: 48px;
+  height: 48px;
+  stroke-width: 1.5;
+  color: var(--text-muted);
+}
+
+/* Section header icons */
+.recommended-section h2 .lucide,
+.pinned-section h3 .lucide,
+.feed-header h1 .lucide {
+  width: 24px;
+  height: 24px;
+}
+
+/* Settings section icons */
+.section-icon .lucide {
+  width: 20px;
+  height: 20px;
+}
+
+/* Filter chip icons */
+.filter-chip .lucide {
+  width: 14px;
+  height: 14px;
+}
+
+/* Profile tab icons */
+.profile-tab .lucide {
+  width: 16px;
+  height: 16px;
+}
+
+/* Profile action button icons */
+.profile-btn .lucide {
+  width: 14px;
+  height: 14px;
+}
+
+/* Activity icons */
+.activity-icon .lucide {
+  width: 18px;
+  height: 18px;
+}
+
+/* Search result icons */
+.result-icon .lucide {
+  width: 20px;
+  height: 20px;
+  color: #fff;
+}
+
+/* Settings about section icon */
+.settings-about-icon .lucide {
+  width: 36px;
+  height: 36px;
+  color: var(--primary);
+}
+
+/* Download button icon */
+.setting-btn .lucide {
+  width: 14px;
+  height: 14px;
+}
+
+/* Modal close icon */
+.modal-close .lucide {
+  width: 20px;
+  height: 20px;
+}
+
+/* Back link icon */
+.content-back .lucide {
+  width: 16px;
+  height: 16px;
+}
+
+/* Comments section header icon */
+.comments-section h2 .lucide {
+  width: 20px;
+  height: 20px;
+}
