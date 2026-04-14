@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HowToHub — Profile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📘</text></svg>">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="top-nav">
+    <div class="container">
+      <a href="../index.html" class="nav-logo">
+        <div class="logo-icon">H</div>
+        <span>HowToHub</span>
+      </a>
+      <div class="nav-search">
+        <span class="search-icon">&#128269;</span>
+        <input type="text" placeholder="Search tutorials, manuals, users..." autocomplete="off">
+        <div class="search-results"></div>
+      </div>
+      <div class="desktop-nav-links">
+        <a href="../index.html" class="desktop-nav-link" data-page="home">&#127968; Home</a>
+        <a href="bookmarks.html" class="desktop-nav-link" data-page="bookmarks">&#128278; Saved</a>
+        <a href="profile.html" class="desktop-nav-link active" data-page="profile">&#128100; Profile</a>
+        <a href="settings.html" class="desktop-nav-link" data-page="settings">&#9881; Settings</a>
+      </div>
+      <div class="nav-actions">
+        <button class="nav-btn hide-mobile" onclick="toggleTheme()" title="Toggle theme">&#127763;</button>
+        <button class="nav-btn hide-mobile" title="Notifications">&#128276;<span class="badge"></span></button>
+        <a href="profile.html" class="nav-avatar">YU</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="../index.html" data-page="home"><span class="nav-icon">&#127968;</span><span>Home</span></a>
+    <a href="bookmarks.html" data-page="bookmarks"><span class="nav-icon">&#128278;</span><span>Saved</span></a>
+    <a href="profile.html" data-page="profile" class="active"><span class="nav-icon">&#128100;</span><span>Profile</span></a>
+    <a href="settings.html" data-page="settings"><span class="nav-icon">&#9881;</span><span>Settings</span></a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container page-content">
+    <!-- Profile Header -->
+    <div class="profile-header" id="profileHeader"></div>
+
+    <!-- Profile Tabs -->
+    <div class="profile-tabs" id="profileTabs">
+      <button class="profile-tab active" onclick="switchProfileTab('posts', this)">&#128221; Posts</button>
+      <button class="profile-tab" onclick="switchProfileTab('likes', this)">&#10084; Likes</button>
+      <button class="profile-tab" onclick="switchProfileTab('comments', this)">&#128172; Comments</button>
+      <button class="profile-tab" onclick="switchProfileTab('activity', this)">&#128338; Activity</button>
+    </div>
+
+    <!-- Pinned Content -->
+    <div class="pinned-section" id="pinnedSection"></div>
+
+    <!-- Tab Content -->
+    <div id="profileContent"></div>
+  </main>
+
+  <!-- Edit Profile Modal -->
+  <div class="modal-overlay" id="editProfileModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Edit Profile</h2>
+        <button class="modal-close" onclick="closeEditProfile()">&#10005;</button>
+      </div>
+      <div class="modal-body edit-profile-form">
+        <div class="avatar-upload">
+          <div class="current-avatar" id="editAvatar">YU</div>
+          <div>
+            <h4>Profile Picture</h4>
+            <p class="caption">Click to change your avatar</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Display Name</label>
+          <input type="text" id="editName" value="You">
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="editUsername" value="currentuser">
+        </div>
+        <div class="form-group">
+          <label>Bio</label>
+          <textarea id="editBio" rows="3">Exploring, learning, and creating on HowToHub.</textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="profile-btn profile-btn-secondary" onclick="closeEditProfile()">Cancel</button>
+        <button class="profile-btn profile-btn-primary" onclick="saveProfile()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Modal -->
+  <div class="modal-overlay" id="createModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Create New Tutorial</h2>
+        <button class="modal-close" onclick="closeCreateModal()">&#10005;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" id="newTitle" placeholder="e.g., How to Build a React App">
+        </div>
+        <div class="form-group">
+          <label>Short Preview</label>
+          <textarea id="newPreview" rows="2" placeholder="A brief description (2-3 lines)"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="newTags">
+            <option value="Tech">Tech</option>
+            <option value="Design">Design</option>
+            <option value="DIY">DIY</option>
+            <option value="Education">Education</option>
+            <option value="Cooking">Cooking</option>
+            <option value="Fitness">Fitness</option>
+            <option value="Finance">Finance</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Content</label>
+          <textarea id="newBody" rows="8" placeholder="Write your tutorial content here..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="profile-btn profile-btn-secondary" onclick="closeCreateModal()">Cancel</button>
+        <button class="profile-btn profile-btn-primary" onclick="submitNewContent()">Publish</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="../js/app.js"></script>
+  <script src="../js/search.js"></script>
+  <script src="../js/algorithm.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const viewUsername = urlParams.get('user');
+    let currentProfileTab = 'posts';
+
+    function getProfileUser() {
+      if (viewUsername && viewUsername !== CURRENT_USER.username) {
+        return SAMPLE_USERS.find(u => u.username === viewUsername) || CURRENT_USER;
+      }
+      return CURRENT_USER;
+    }
+
+    function isOwnProfile() {
+      const user = getProfileUser();
+      return user.username === CURRENT_USER.username;
+    }
+
+    function renderProfileHeader() {
+      const user = getProfileUser();
+      const own = isOwnProfile();
+
+      document.title = `${user.name} — HowToHub`;
+
+      document.getElementById('profileHeader').innerHTML = `
+        <div class="profile-cover"></div>
+        <div class="profile-avatar">${user.initials}</div>
+        <h2 class="profile-name">${user.name}</h2>
+        <p class="profile-username">@${user.username}</p>
+        <p class="profile-bio">${user.bio}</p>
+        <div class="profile-stats">
+          <div class="profile-stat">
+            <div class="stat-number">${formatNumber(user.followers)}</div>
+            <div class="stat-label">Followers</div>
+          </div>
+          <div class="profile-stat">
+            <div class="stat-number">${formatNumber(user.following)}</div>
+            <div class="stat-label">Following</div>
+          </div>
+          <div class="profile-stat">
+            <div class="stat-number">${user.posts}</div>
+            <div class="stat-label">Posts</div>
+          </div>
+        </div>
+        <div class="profile-actions">
+          ${own ? `
+            <button class="profile-btn profile-btn-primary" onclick="openEditProfile()">&#9998; Edit Profile</button>
+            <button class="profile-btn profile-btn-secondary" onclick="shareProfile()">&#128279; Share Profile</button>
+            <button class="profile-btn profile-btn-primary" onclick="openCreateModal()">&#10133; New Tutorial</button>
+          ` : `
+            <button class="profile-btn profile-btn-primary" onclick="handleFollowProfile(this)">
+              ${state.isFollowing(user.username) ? 'Following' : 'Follow'}
+            </button>
+            <button class="profile-btn profile-btn-secondary" onclick="shareProfile()">&#128279; Share</button>
+          `}
+        </div>
+      `;
+    }
+
+    function renderPinnedContent() {
+      const section = document.getElementById('pinnedSection');
+      const pinned = state.getPinnedContent();
+
+      if (pinned.length === 0) {
+        section.innerHTML = '';
+        return;
+      }
+
+      section.innerHTML = `
+        <h3>&#128204; Pinned</h3>
+        <div class="cards-grid">
+          ${pinned.map((c, i) => renderContentCard(c, i)).join('')}
+        </div>
+      `;
+
+      setTimeout(initScrollFade, 50);
+    }
+
+    function switchProfileTab(tab, btn) {
+      currentProfileTab = tab;
+      document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      renderProfileTab();
+    }
+
+    function renderProfileTab() {
+      const container = document.getElementById('profileContent');
+      const user = getProfileUser();
+
+      switch (currentProfileTab) {
+        case 'posts':
+          renderPostsTab(container, user);
+          break;
+        case 'likes':
+          renderLikesTab(container);
+          break;
+        case 'comments':
+          renderCommentsTab(container);
+          break;
+        case 'activity':
+          renderActivityTab(container);
+          break;
+      }
+
+      setTimeout(initScrollFade, 50);
+    }
+
+    function renderPostsTab(container, user) {
+      const userPosts = state.getAllContent().filter(c => c.author.username === user.username);
+
+      if (userPosts.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">&#128221;</div>
+            <h3>No posts yet</h3>
+            <p>${isOwnProfile() ? 'Create your first tutorial to share your knowledge!' : 'This user hasn\'t posted yet.'}</p>
+            ${isOwnProfile() ? '<br><button class="profile-btn profile-btn-primary" onclick="openCreateModal()">Create Tutorial</button>' : ''}
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="cards-grid">
+          ${userPosts.map((c, i) => renderContentCard(c, i)).join('')}
+        </div>
+      `;
+    }
+
+    function renderLikesTab(container) {
+      const likedContent = state.getAllContent().filter(c => state.isLiked(c.id));
+
+      if (likedContent.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">&#10084;</div>
+            <h3>No liked content</h3>
+            <p>Content you like will appear here.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="cards-grid">
+          ${likedContent.map((c, i) => renderContentCard(c, i)).join('')}
+        </div>
+      `;
+    }
+
+    function renderCommentsTab(container) {
+      const allComments = [];
+      state.getAllContent().forEach(content => {
+        const comments = state.comments[content.id] || [];
+        comments.forEach(c => {
+          allComments.push({ ...c, contentTitle: content.title, contentId: content.id });
+        });
+      });
+
+      if (allComments.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">&#128172;</div>
+            <h3>No comments yet</h3>
+            <p>Your comments on tutorials will appear here.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = allComments.map(c => `
+        <div class="activity-item scroll-fade" onclick="openContent(${c.contentId})" style="cursor: pointer;">
+          <div class="activity-icon">&#128172;</div>
+          <div class="activity-text">
+            <strong>You</strong> commented on <strong>${c.contentTitle}</strong>
+            <p style="color: var(--text-secondary); font-size: 13px; margin-top: 4px;">"${c.text}"</p>
+            <div class="activity-time">${c.time}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderActivityTab(container) {
+      const activities = [];
+
+      // Gather activities from state
+      state.getAllContent().forEach(content => {
+        if (state.isLiked(content.id)) {
+          activities.push({ type: 'like', icon: '&#10084;', text: `You liked <strong>${content.title}</strong>`, contentId: content.id, time: 'Recently' });
+        }
+        if (state.isBookmarked(content.id)) {
+          activities.push({ type: 'bookmark', icon: '&#128278;', text: `You saved <strong>${content.title}</strong>`, contentId: content.id, time: 'Recently' });
+        }
+        if (state.isPinned(content.id)) {
+          activities.push({ type: 'pin', icon: '&#128204;', text: `You pinned <strong>${content.title}</strong>`, contentId: content.id, time: 'Recently' });
+        }
+      });
+
+      Object.keys(state.following).forEach(username => {
+        if (state.following[username]) {
+          const user = SAMPLE_USERS.find(u => u.username === username);
+          if (user) {
+            activities.push({ type: 'follow', icon: '&#128100;', text: `You followed <strong>${user.name}</strong>`, time: 'Recently' });
+          }
+        }
+      });
+
+      if (activities.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">&#128338;</div>
+            <h3>No activity yet</h3>
+            <p>Your interactions will appear here.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = activities.map(a => `
+        <div class="activity-item scroll-fade" ${a.contentId ? `onclick="openContent(${a.contentId})" style="cursor: pointer;"` : ''}>
+          <div class="activity-icon">${a.icon}</div>
+          <div class="activity-text">
+            ${a.text}
+            <div class="activity-time">${a.time}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openEditProfile() {
+      document.getElementById('editProfileModal').classList.add('active');
+    }
+
+    function closeEditProfile() {
+      document.getElementById('editProfileModal').classList.remove('active');
+    }
+
+    function saveProfile() {
+      const name = document.getElementById('editName').value.trim();
+      const username = document.getElementById('editUsername').value.trim();
+      const bio = document.getElementById('editBio').value.trim();
+
+      if (name) CURRENT_USER.name = name;
+      if (username) CURRENT_USER.username = username;
+      if (bio) CURRENT_USER.bio = bio;
+      if (name) CURRENT_USER.initials = name.split(' ').map(w => w[0]).join('').toUpperCase().substring(0, 2);
+
+      closeEditProfile();
+      renderProfileHeader();
+      showToast('Profile updated!');
+    }
+
+    function handleFollowProfile(btn) {
+      const user = getProfileUser();
+      const following = state.toggleFollow(user.username);
+      btn.textContent = following ? 'Following' : 'Follow';
+      showToast(following ? `Following @${user.username}` : `Unfollowed @${user.username}`);
+    }
+
+    function shareProfile() {
+      if (navigator.share) {
+        navigator.share({ title: `${getProfileUser().name} on HowToHub`, url: window.location.href });
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        showToast('Profile link copied!');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setActiveNav('profile');
+      renderProfileHeader();
+      renderPinnedContent();
+      renderProfileTab();
+    });
+  </script>
+</body>
+</html>
