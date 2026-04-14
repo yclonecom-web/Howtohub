@@ -21,21 +21,21 @@
       </a>
 
       <div class="nav-search">
-        <span class="search-icon">&#128269;</span>
+        <span class="search-icon"><i data-lucide="search"></i></span>
         <input type="text" placeholder="Search tutorials, manuals, users..." autocomplete="off">
         <div class="search-results"></div>
       </div>
 
       <div class="desktop-nav-links">
-        <a href="../index.html" class="desktop-nav-link" data-page="home">&#127968; Home</a>
-        <a href="bookmarks.html" class="desktop-nav-link" data-page="bookmarks">&#128278; Saved</a>
-        <a href="profile.html" class="desktop-nav-link" data-page="profile">&#128100; Profile</a>
-        <a href="settings.html" class="desktop-nav-link" data-page="settings">&#9881; Settings</a>
+        <a href="../index.html" class="desktop-nav-link" data-page="home"><i data-lucide="home"></i> Home</a>
+        <a href="bookmarks.html" class="desktop-nav-link" data-page="bookmarks"><i data-lucide="bookmark"></i> Saved</a>
+        <a href="profile.html" class="desktop-nav-link" data-page="profile"><i data-lucide="user"></i> Profile</a>
+        <a href="settings.html" class="desktop-nav-link" data-page="settings"><i data-lucide="settings"></i> Settings</a>
       </div>
 
       <div class="nav-actions">
-        <button class="nav-btn hide-mobile" onclick="toggleTheme()" title="Toggle theme">&#127763;</button>
-        <button class="nav-btn hide-mobile" title="Notifications">&#128276;<span class="badge"></span></button>
+        <button class="nav-btn hide-mobile" onclick="toggleTheme()" title="Toggle theme"><i data-lucide="moon"></i></button>
+        <button class="nav-btn hide-mobile" title="Notifications"><i data-lucide="bell"></i><span class="badge"></span></button>
         <a href="profile.html" class="nav-avatar">YU</a>
       </div>
     </div>
@@ -44,16 +44,16 @@
   <!-- Mobile Bottom Navigation -->
   <nav class="bottom-nav">
     <a href="../index.html" data-page="home">
-      <span class="nav-icon">&#127968;</span><span>Home</span>
+      <span class="nav-icon"><i data-lucide="home"></i></span><span>Home</span>
     </a>
     <a href="bookmarks.html" data-page="bookmarks">
-      <span class="nav-icon">&#128278;</span><span>Saved</span>
+      <span class="nav-icon"><i data-lucide="bookmark"></i></span><span>Saved</span>
     </a>
     <a href="profile.html" data-page="profile">
-      <span class="nav-icon">&#128100;</span><span>Profile</span>
+      <span class="nav-icon"><i data-lucide="user"></i></span><span>Profile</span>
     </a>
     <a href="settings.html" data-page="settings">
-      <span class="nav-icon">&#9881;</span><span>Settings</span>
+      <span class="nav-icon"><i data-lucide="settings"></i></span><span>Settings</span>
     </a>
   </nav>
 
@@ -65,7 +65,7 @@
 
     <!-- Similar Content -->
     <div class="recommended-section" id="similarSection" style="max-width: 800px; margin: 40px auto 0;">
-      <h2>&#128161; Similar Tutorials</h2>
+      <h2><i data-lucide="lightbulb"></i> Similar Tutorials</h2>
       <div class="cards-grid" id="similarGrid"></div>
     </div>
   </main>
@@ -73,6 +73,7 @@
   <!-- Toast -->
   <div class="toast" id="toast"></div>
 
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
   <script src="../js/app.js"></script>
   <script src="../js/search.js"></script>
   <script src="../js/algorithm.js"></script>
@@ -87,7 +88,7 @@
       if (!content) {
         view.innerHTML = `
           <div class="empty-state">
-            <div class="empty-icon">&#128533;</div>
+            <div class="empty-icon"><i data-lucide="frown"></i></div>
             <h3>Content not found</h3>
             <p>This tutorial may have been removed or doesn't exist.</p>
             <br>
@@ -108,10 +109,10 @@
       const comments = state.getComments(contentId);
 
       view.innerHTML = `
-        <a href="../index.html" class="content-back">&#8592; Back to feed</a>
+        <a href="../index.html" class="content-back"><i data-lucide="arrow-left"></i> Back to feed</a>
 
         <div class="content-hero">
-          <div class="content-hero-placeholder" style="background: ${content.coverGradient}">${content.coverIcon}</div>
+          <div class="content-hero-placeholder" style="background: ${content.coverGradient}"><i data-lucide="${content.coverIcon}"></i></div>
         </div>
 
         <div class="card-tags" style="margin-bottom: 16px;">
@@ -135,23 +136,23 @@
 
         <div class="content-actions-bar">
           <button class="content-action-btn ${isLiked ? 'liked' : ''}" onclick="handleContentLike(this)">
-            <span>${isLiked ? '&#10084;' : '&#9825;'}</span>
+            <span><i data-lucide="heart"></i></span>
             <span class="like-count">${formatNumber(likeCount)}</span>
           </button>
           <button class="content-action-btn" onclick="document.getElementById('commentInput').focus()">
-            <span>&#128172;</span>
+            <span><i data-lucide="message-circle"></i></span>
             <span>${comments.length} Comments</span>
           </button>
           <button class="content-action-btn ${isSaved ? 'saved' : ''}" onclick="handleContentSave(this)">
-            <span>&#128278;</span>
+            <span><i data-lucide="bookmark"></i></span>
             <span>${isSaved ? 'Saved' : 'Save'}</span>
           </button>
           <button class="content-action-btn ${isPinned ? 'saved' : ''}" onclick="handleContentPin(this)">
-            <span>&#128204;</span>
+            <span><i data-lucide="pin"></i></span>
             <span>${isPinned ? 'Pinned' : 'Pin'}</span>
           </button>
           <button class="content-action-btn" onclick="shareContent()">
-            <span>&#128279;</span>
+            <span><i data-lucide="share-2"></i></span>
             <span>Share</span>
           </button>
         </div>
@@ -161,7 +162,7 @@
         </div>
 
         <div class="comments-section">
-          <h2>&#128172; Comments (${comments.length})</h2>
+          <h2><i data-lucide="message-circle"></i> Comments (${comments.length})</h2>
 
           <div class="comment-input-wrapper">
             <div class="comment-avatar">${CURRENT_USER.initials}</div>
@@ -191,7 +192,7 @@
             </div>
             <p class="comment-text">${c.text}</p>
             <div class="comment-actions">
-              <button class="comment-action">&#9825; Like</button>
+              <button class="comment-action"><i data-lucide="heart"></i> Like</button>
               <button class="comment-action">Reply</button>
             </div>
           </div>
@@ -205,7 +206,8 @@
       const count = content.likes + (liked ? 1 : 0);
 
       btn.classList.toggle('liked', liked);
-      btn.querySelector('span:first-child').innerHTML = liked ? '&#10084;' : '&#9825;';
+      btn.querySelector('span:first-child').innerHTML = '<i data-lucide="heart"></i>';
+      refreshIcons();
       btn.querySelector('.like-count').textContent = formatNumber(count);
 
       showToast(liked ? 'Added to likes' : 'Removed from likes');
@@ -249,7 +251,8 @@
 
       // Update comment count in actions bar
       const comments = state.getComments(contentId);
-      document.querySelector('.comments-section h2').innerHTML = `&#128172; Comments (${comments.length})`;
+      document.querySelector('.comments-section h2').innerHTML = `<i data-lucide="message-circle"></i> Comments (${comments.length})`;
+      refreshIcons();
     }
 
     function shareContent() {
@@ -278,6 +281,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       renderContentView();
       renderSimilarContent();
+      refreshIcons();
     });
   </script>
 </body>

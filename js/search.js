@@ -69,7 +69,7 @@ function renderSearchResults(results, container) {
   if (results.content.length === 0 && results.users.length === 0) {
     container.innerHTML = `
       <div style="padding: 24px; text-align: center; color: var(--text-muted);">
-        <div style="font-size: 32px; margin-bottom: 8px;">&#128269;</div>
+        <div style="font-size: 32px; margin-bottom: 8px;"><i data-lucide="search"></i></div>
         <p>No results found</p>
       </div>
     `;
@@ -84,7 +84,7 @@ function renderSearchResults(results, container) {
     results.content.forEach(c => {
       html += `
         <div class="search-result-item" onclick="openContent(${c.id})">
-          <div class="result-icon" style="background: ${c.coverGradient}; color: #fff; font-size: 16px;">${c.coverIcon}</div>
+          <div class="result-icon" style="background: ${c.coverGradient}; color: #fff;"><i data-lucide="${c.coverIcon}"></i></div>
           <div class="result-info">
             <h4>${highlightMatch(c.title, document.querySelector('.nav-search input, .bookmarks-search input, .mobile-search-header input')?.value || '')}</h4>
             <p>${c.author.name} · ${(c.tags || []).join(', ')}</p>
@@ -111,6 +111,7 @@ function renderSearchResults(results, container) {
 
   container.innerHTML = html;
   container.classList.add('active');
+  refreshIcons();
 }
 
 function highlightMatch(text, query) {
@@ -176,7 +177,7 @@ function renderSuggestedContent() {
   trending.forEach(c => {
     html += `
       <div class="search-result-item" onclick="openContent(${c.id})" style="border-bottom: 1px solid var(--border);">
-        <div class="result-icon" style="background: ${c.coverGradient}; color: #fff;">${c.coverIcon}</div>
+        <div class="result-icon" style="background: ${c.coverGradient}; color: #fff;"><i data-lucide="${c.coverIcon}"></i></div>
         <div class="result-info">
           <h4>${c.title}</h4>
           <p>${formatNumber(c.views)} views · ${c.author.name}</p>
@@ -188,4 +189,7 @@ function renderSuggestedContent() {
   return html;
 }
 
-document.addEventListener('DOMContentLoaded', initSearch);
+document.addEventListener('DOMContentLoaded', () => {
+  initSearch();
+  refreshIcons();
+});

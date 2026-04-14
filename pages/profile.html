@@ -20,19 +20,19 @@
         <span>HowToHub</span>
       </a>
       <div class="nav-search">
-        <span class="search-icon">&#128269;</span>
+        <span class="search-icon"><i data-lucide="search"></i></span>
         <input type="text" placeholder="Search tutorials, manuals, users..." autocomplete="off">
         <div class="search-results"></div>
       </div>
       <div class="desktop-nav-links">
-        <a href="../index.html" class="desktop-nav-link" data-page="home">&#127968; Home</a>
-        <a href="bookmarks.html" class="desktop-nav-link" data-page="bookmarks">&#128278; Saved</a>
-        <a href="profile.html" class="desktop-nav-link active" data-page="profile">&#128100; Profile</a>
-        <a href="settings.html" class="desktop-nav-link" data-page="settings">&#9881; Settings</a>
+        <a href="../index.html" class="desktop-nav-link" data-page="home"><i data-lucide="home"></i> Home</a>
+        <a href="bookmarks.html" class="desktop-nav-link" data-page="bookmarks"><i data-lucide="bookmark"></i> Saved</a>
+        <a href="profile.html" class="desktop-nav-link active" data-page="profile"><i data-lucide="user"></i> Profile</a>
+        <a href="settings.html" class="desktop-nav-link" data-page="settings"><i data-lucide="settings"></i> Settings</a>
       </div>
       <div class="nav-actions">
-        <button class="nav-btn hide-mobile" onclick="toggleTheme()" title="Toggle theme">&#127763;</button>
-        <button class="nav-btn hide-mobile" title="Notifications">&#128276;<span class="badge"></span></button>
+        <button class="nav-btn hide-mobile" onclick="toggleTheme()" title="Toggle theme"><i data-lucide="moon"></i></button>
+        <button class="nav-btn hide-mobile" title="Notifications"><i data-lucide="bell"></i><span class="badge"></span></button>
         <a href="profile.html" class="nav-avatar">YU</a>
       </div>
     </div>
@@ -40,10 +40,10 @@
 
   <!-- Mobile Bottom Navigation -->
   <nav class="bottom-nav">
-    <a href="../index.html" data-page="home"><span class="nav-icon">&#127968;</span><span>Home</span></a>
-    <a href="bookmarks.html" data-page="bookmarks"><span class="nav-icon">&#128278;</span><span>Saved</span></a>
-    <a href="profile.html" data-page="profile" class="active"><span class="nav-icon">&#128100;</span><span>Profile</span></a>
-    <a href="settings.html" data-page="settings"><span class="nav-icon">&#9881;</span><span>Settings</span></a>
+    <a href="../index.html" data-page="home"><span class="nav-icon"><i data-lucide="home"></i></span><span>Home</span></a>
+    <a href="bookmarks.html" data-page="bookmarks"><span class="nav-icon"><i data-lucide="bookmark"></i></span><span>Saved</span></a>
+    <a href="profile.html" data-page="profile" class="active"><span class="nav-icon"><i data-lucide="user"></i></span><span>Profile</span></a>
+    <a href="settings.html" data-page="settings"><span class="nav-icon"><i data-lucide="settings"></i></span><span>Settings</span></a>
   </nav>
 
   <!-- Main Content -->
@@ -53,10 +53,10 @@
 
     <!-- Profile Tabs -->
     <div class="profile-tabs" id="profileTabs">
-      <button class="profile-tab active" onclick="switchProfileTab('posts', this)">&#128221; Posts</button>
-      <button class="profile-tab" onclick="switchProfileTab('likes', this)">&#10084; Likes</button>
-      <button class="profile-tab" onclick="switchProfileTab('comments', this)">&#128172; Comments</button>
-      <button class="profile-tab" onclick="switchProfileTab('activity', this)">&#128338; Activity</button>
+      <button class="profile-tab active" onclick="switchProfileTab('posts', this)"><i data-lucide="file-text"></i> Posts</button>
+      <button class="profile-tab" onclick="switchProfileTab('likes', this)"><i data-lucide="heart"></i> Likes</button>
+      <button class="profile-tab" onclick="switchProfileTab('comments', this)"><i data-lucide="message-circle"></i> Comments</button>
+      <button class="profile-tab" onclick="switchProfileTab('activity', this)"><i data-lucide="clock"></i> Activity</button>
     </div>
 
     <!-- Pinned Content -->
@@ -71,7 +71,7 @@
     <div class="modal">
       <div class="modal-header">
         <h2>Edit Profile</h2>
-        <button class="modal-close" onclick="closeEditProfile()">&#10005;</button>
+        <button class="modal-close" onclick="closeEditProfile()"><i data-lucide="x"></i></button>
       </div>
       <div class="modal-body edit-profile-form">
         <div class="avatar-upload">
@@ -106,7 +106,7 @@
     <div class="modal">
       <div class="modal-header">
         <h2>Create New Tutorial</h2>
-        <button class="modal-close" onclick="closeCreateModal()">&#10005;</button>
+        <button class="modal-close" onclick="closeCreateModal()"><i data-lucide="x"></i></button>
       </div>
       <div class="modal-body">
         <div class="form-group">
@@ -144,6 +144,7 @@
   <!-- Toast -->
   <div class="toast" id="toast"></div>
 
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
   <script src="../js/app.js"></script>
   <script src="../js/search.js"></script>
   <script src="../js/algorithm.js"></script>
@@ -192,14 +193,14 @@
         </div>
         <div class="profile-actions">
           ${own ? `
-            <button class="profile-btn profile-btn-primary" onclick="openEditProfile()">&#9998; Edit Profile</button>
-            <button class="profile-btn profile-btn-secondary" onclick="shareProfile()">&#128279; Share Profile</button>
-            <button class="profile-btn profile-btn-primary" onclick="openCreateModal()">&#10133; New Tutorial</button>
+            <button class="profile-btn profile-btn-primary" onclick="openEditProfile()"><i data-lucide="pencil"></i> Edit Profile</button>
+            <button class="profile-btn profile-btn-secondary" onclick="shareProfile()"><i data-lucide="link"></i> Share Profile</button>
+            <button class="profile-btn profile-btn-primary" onclick="openCreateModal()"><i data-lucide="plus"></i> New Tutorial</button>
           ` : `
             <button class="profile-btn profile-btn-primary" onclick="handleFollowProfile(this)">
               ${state.isFollowing(user.username) ? 'Following' : 'Follow'}
             </button>
-            <button class="profile-btn profile-btn-secondary" onclick="shareProfile()">&#128279; Share</button>
+            <button class="profile-btn profile-btn-secondary" onclick="shareProfile()"><i data-lucide="link"></i> Share</button>
           `}
         </div>
       `;
@@ -215,7 +216,7 @@
       }
 
       section.innerHTML = `
-        <h3>&#128204; Pinned</h3>
+        <h3><i data-lucide="pin"></i> Pinned</h3>
         <div class="cards-grid">
           ${pinned.map((c, i) => renderContentCard(c, i)).join('')}
         </div>
@@ -259,7 +260,7 @@
       if (userPosts.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
-            <div class="empty-icon">&#128221;</div>
+            <div class="empty-icon"><i data-lucide="file-text"></i></div>
             <h3>No posts yet</h3>
             <p>${isOwnProfile() ? 'Create your first tutorial to share your knowledge!' : 'This user hasn\'t posted yet.'}</p>
             ${isOwnProfile() ? '<br><button class="profile-btn profile-btn-primary" onclick="openCreateModal()">Create Tutorial</button>' : ''}
@@ -281,7 +282,7 @@
       if (likedContent.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
-            <div class="empty-icon">&#10084;</div>
+            <div class="empty-icon"><i data-lucide="heart"></i></div>
             <h3>No liked content</h3>
             <p>Content you like will appear here.</p>
           </div>
@@ -308,7 +309,7 @@
       if (allComments.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
-            <div class="empty-icon">&#128172;</div>
+            <div class="empty-icon"><i data-lucide="message-circle"></i></div>
             <h3>No comments yet</h3>
             <p>Your comments on tutorials will appear here.</p>
           </div>
@@ -318,7 +319,7 @@
 
       container.innerHTML = allComments.map(c => `
         <div class="activity-item scroll-fade" onclick="openContent(${c.contentId})" style="cursor: pointer;">
-          <div class="activity-icon">&#128172;</div>
+          <div class="activity-icon"><i data-lucide="message-circle"></i></div>
           <div class="activity-text">
             <strong>You</strong> commented on <strong>${c.contentTitle}</strong>
             <p style="color: var(--text-secondary); font-size: 13px; margin-top: 4px;">"${c.text}"</p>
@@ -334,13 +335,13 @@
       // Gather activities from state
       state.getAllContent().forEach(content => {
         if (state.isLiked(content.id)) {
-          activities.push({ type: 'like', icon: '&#10084;', text: `You liked <strong>${content.title}</strong>`, contentId: content.id, time: 'Recently' });
+          activities.push({ type: 'like', icon: '<i data-lucide="heart"></i>', text: `You liked <strong>${content.title}</strong>`, contentId: content.id, time: 'Recently' });
         }
         if (state.isBookmarked(content.id)) {
-          activities.push({ type: 'bookmark', icon: '&#128278;', text: `You saved <strong>${content.title}</strong>`, contentId: content.id, time: 'Recently' });
+          activities.push({ type: 'bookmark', icon: '<i data-lucide="bookmark"></i>', text: `You saved <strong>${content.title}</strong>`, contentId: content.id, time: 'Recently' });
         }
         if (state.isPinned(content.id)) {
-          activities.push({ type: 'pin', icon: '&#128204;', text: `You pinned <strong>${content.title}</strong>`, contentId: content.id, time: 'Recently' });
+          activities.push({ type: 'pin', icon: '<i data-lucide="pin"></i>', text: `You pinned <strong>${content.title}</strong>`, contentId: content.id, time: 'Recently' });
         }
       });
 
@@ -348,7 +349,7 @@
         if (state.following[username]) {
           const user = SAMPLE_USERS.find(u => u.username === username);
           if (user) {
-            activities.push({ type: 'follow', icon: '&#128100;', text: `You followed <strong>${user.name}</strong>`, time: 'Recently' });
+            activities.push({ type: 'follow', icon: '<i data-lucide="user-plus"></i>', text: `You followed <strong>${user.name}</strong>`, time: 'Recently' });
           }
         }
       });
@@ -356,7 +357,7 @@
       if (activities.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
-            <div class="empty-icon">&#128338;</div>
+            <div class="empty-icon"><i data-lucide="clock"></i></div>
             <h3>No activity yet</h3>
             <p>Your interactions will appear here.</p>
           </div>
@@ -419,6 +420,7 @@
       renderProfileHeader();
       renderPinnedContent();
       renderProfileTab();
+      refreshIcons();
     });
   </script>
 </body>
