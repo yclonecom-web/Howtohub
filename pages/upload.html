@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HowToHub — Create Content</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📘</text></svg>">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="top-nav">
+    <div class="container">
+      <a href="../index.html" class="nav-logo">
+        <div class="logo-icon">H</div>
+        <span>HowToHub</span>
+      </a>
+
+      <div class="nav-search">
+        <span class="search-icon"><i data-lucide="search"></i></span>
+        <input type="text" placeholder="Search tutorials, manuals, users..." autocomplete="off">
+        <div class="search-results"></div>
+      </div>
+
+      <div class="desktop-nav-links">
+        <a href="../index.html" class="desktop-nav-link" data-page="home"><i data-lucide="home"></i> Home</a>
+        <a href="bookmarks.html" class="desktop-nav-link" data-page="bookmarks"><i data-lucide="bookmark"></i> Saved</a>
+        <a href="upload.html" class="desktop-nav-link active" data-page="create"><i data-lucide="plus-circle"></i> Create</a>
+        <a href="profile.html" class="desktop-nav-link" data-page="profile"><i data-lucide="user"></i> Profile</a>
+        <a href="settings.html" class="desktop-nav-link" data-page="settings"><i data-lucide="settings"></i> Settings</a>
+      </div>
+
+      <div class="nav-actions">
+        <button class="nav-btn hide-mobile" onclick="toggleTheme()" title="Toggle theme"><i data-lucide="moon"></i></button>
+        <button class="nav-btn hide-mobile" title="Notifications"><i data-lucide="bell"></i><span class="badge"></span></button>
+        <a href="profile.html" class="nav-avatar">YU</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="../index.html" data-page="home">
+      <span class="nav-icon"><i data-lucide="home"></i></span><span>Home</span>
+    </a>
+    <a href="bookmarks.html" data-page="bookmarks">
+      <span class="nav-icon"><i data-lucide="bookmark"></i></span><span>Saved</span>
+    </a>
+    <a href="upload.html" data-page="create" class="active">
+      <span class="nav-icon"><i data-lucide="plus-circle"></i></span><span>Create</span>
+    </a>
+    <a href="profile.html" data-page="profile">
+      <span class="nav-icon"><i data-lucide="user"></i></span><span>Profile</span>
+    </a>
+    <a href="settings.html" data-page="settings">
+      <span class="nav-icon"><i data-lucide="settings"></i></span><span>Settings</span>
+    </a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container page-content">
+    <div class="upload-page">
+
+      <!-- Page Header -->
+      <div class="upload-header">
+        <h1><i data-lucide="pen-tool"></i> Content Studio</h1>
+        <p class="upload-subtitle">Create and publish multi-format content</p>
+      </div>
+
+      <!-- Content Type Selector -->
+      <section class="upload-section">
+        <h2 class="upload-section-title"><i data-lucide="layout-grid"></i> Content Type</h2>
+        <div class="type-selector" id="typeSelector"></div>
+      </section>
+
+      <!-- Template Selector -->
+      <section class="upload-section">
+        <h2 class="upload-section-title"><i data-lucide="file-plus"></i> Template <span class="optional-badge">Optional</span></h2>
+        <div class="template-selector" id="templateSelector"></div>
+      </section>
+
+      <!-- Main Layout: Form + Preview -->
+      <div class="upload-layout">
+
+        <!-- Left: Form -->
+        <div class="upload-form-panel">
+          <section class="upload-section">
+            <h2 class="upload-section-title"><i data-lucide="edit-3"></i> Details</h2>
+            <div id="formFields"></div>
+          </section>
+
+          <!-- Action Buttons -->
+          <div class="upload-actions">
+            <button class="upload-btn upload-btn-secondary" onclick="saveDraft()">
+              <i data-lucide="save"></i> Save Draft
+            </button>
+            <button class="upload-btn upload-btn-secondary" onclick="clearForm()">
+              <i data-lucide="trash-2"></i> Clear
+            </button>
+            <button class="upload-btn upload-btn-primary" onclick="publishContent()">
+              <i data-lucide="send"></i> Publish
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Preview -->
+        <div class="upload-preview-panel">
+          <div class="preview-header">
+            <h2 class="upload-section-title"><i data-lucide="eye"></i> Live Preview</h2>
+          </div>
+          <div class="preview-sticky">
+            <div id="previewContainer">
+              <div class="preview-empty">
+                <i data-lucide="eye"></i>
+                <p>Your preview will appear here as you fill in the form</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/search.js"></script>
+  <script src="../js/algorithm.js"></script>
+  <script src="../js/carousel.js"></script>
+  <script src="../js/templates.js"></script>
+  <script src="../js/firebase.js"></script>
+  <script src="../components/carouselComponent.js"></script>
+  <script src="../components/previewCard.js"></script>
+  <script src="../js/upload.js"></script>
+</body>
+</html>
