@@ -262,15 +262,23 @@ const SAMPLE_USERS = [
   { name: "Finance Fiona", username: "fionafinance", initials: "FF", bio: "Financial advisor. Making money management simple and accessible.", followers: 7300, following: 156, posts: 24 }
 ];
 
-// --- Current User ---
-const CURRENT_USER = {
-  name: "You",
-  username: "currentuser",
-  initials: "YU",
-  bio: "Exploring, learning, and creating on HowToHub.",
+// --- Current User (dynamic based on auth) ---
+const CURRENT_USER = (typeof auth !== 'undefined' && auth.isLoggedIn()) ? {
+  name: auth.getUser().name,
+  username: auth.getUser().username,
+  initials: auth.getUser().initials,
+  bio: auth.getUser().bio || 'Exploring, learning, and creating on HowToHub.',
   followers: 128,
   following: 45,
   posts: 3
+} : {
+  name: "Guest",
+  username: "guest",
+  initials: "G",
+  bio: "Sign in to start creating content.",
+  followers: 0,
+  following: 0,
+  posts: 0
 };
 
 // --- State Management ---
@@ -398,20 +406,69 @@ class AppState {
     content.likes = 0;
     content.comments = [];
     content.views = 0;
+    content.status = content.status || 'published';
     content.date = new Date().toISOString().split('T')[0];
     content.coverGradient = `linear-gradient(135deg, hsl(${Math.random()*360}, 70%, 40%) 0%, hsl(${Math.random()*360}, 70%, 70%) 100%)`;
-    content.coverIcon = "file-text";
+    content.coverIcon = content.coverIcon || "file-text";
     this.userContent.unshift(content);
     this._save('howtohub_user_content', this.userContent);
     return content;
   }
 
-  getAllContent() {
-    return [...this.userContent, ...SAMPLE_CONTENT];
+  updateUserContent(id, updates) {
+    const idx = this.userContent.findIndex(c => c.id === id);
+    if (idx === -1) return null;
+    Object.assign(this.userContent[idx], updates);
+    this.userContent[idx].lastEdited = new Date().toISOString();
+    this._save('howtohub_user_content', this.userContent);
+    return this.userContent[idx];
+  }
+
+  deleteUserContent(id) {
+    const idx = this.userContent.findIndex(c => c.id === id);
+    if (idx === -1) return false;
+    this.userContent.splice(idx, 1);
+    this._save('howtohub_user_content', this.userContent);
+    // Clean up related data
+    delete this.likes[id];
+    delete this.bookmarks[id];
+    delete this.comments[id];
+    delete this.pins[id];
+    this._save('howtohub_likes', this.likes);
+    this._save('howtohub_bookmarks', this.bookmarks);
+    this._save('howtohub_comments', this.comments);
+    this._save('howtohub_pins', this.pins);
+    return true;
+  }
+
+  togglePublishStatus(id) {
+    const post = this.userContent.find(c => c.id === id);
+    if (!post) return null;
+    post.status = post.status === 'published' ? 'draft' : 'published';
+    this._save('howtohub_user_content', this.userContent);
+    return post;
+  }
+
+  isOwnContent(contentId) {
+    return this.userContent.some(c => c.id === contentId);
+  }
+
+  getAllContent(includeUnpublished) {
+    const published = this.userContent.filter(c => includeUnpublished || c.status !== 'draft');
+    return [...published, ...SAMPLE_CONTENT];
+  }
+
+  getUserContent(includeUnpublished) {
+    if (includeUnpublished) return [...this.userContent];
+    return this.userContent.filter(c => c.status !== 'draft');
+  }
+
+  getDraftContent() {
+    return this.userContent.filter(c => c.status === 'draft');
   }
 
   getContentById(id) {
-    return this.getAllContent().find(c => c.id === id);
+    return this.getAllContent(true).find(c => c.id === id);
   }
 
   getBookmarkedContent() {
@@ -485,12 +542,20 @@ function renderContentCard(content, delay = 0) {
   const isSaved = state.isBookmarked(content.id);
   const likeCount = content.likes + (isLiked ? 1 : 0);
   const commentCount = state.getComments(content.id).length;
+  const isOwn = state.isOwnContent(content.id);
+  const isDraft = content.status === 'draft';
 
   return `
-    <div class="content-card scroll-fade" style="animation-delay: ${delay * 0.08}s" onclick="openContent(${content.id})">
+    <div class="content-card scroll-fade ${isDraft ? 'card-draft' : ''}" style="animation-delay: ${delay * 0.08}s" onclick="openContent(${content.id})">
       <div class="card-cover" style="background: ${content.coverGradient}">
         <div class="card-cover-placeholder"><i data-lucide="${content.coverIcon}"></i></div>
         ${content.pinned || state.isPinned(content.id) ? '<span class="card-pin-badge"><i data-lucide="pin"></i> Pinned</span>' : ''}
+        ${isDraft ? '<span class="card-draft-badge"><i data-lucide="file-edit"></i> Draft</span>' : ''}
+        ${isOwn ? `<div class="card-owner-actions" onclick="event.stopPropagation()">
+          <button class="card-owner-btn" onclick="editPost(${content.id})" title="Edit post"><i data-lucide="pencil"></i></button>
+          <button class="card-owner-btn" onclick="togglePostPublish(${content.id})" title="${isDraft ? 'Publish' : 'Unpublish'}"><i data-lucide="${isDraft ? 'eye' : 'eye-off'}"></i></button>
+          <button class="card-owner-btn card-owner-btn-danger" onclick="confirmDeletePost(${content.id})" title="Delete post"><i data-lucide="trash-2"></i></button>
+        </div>` : ''}
       </div>
       <div class="card-body">
         <div class="card-tags">
@@ -502,7 +567,7 @@ function renderContentCard(content, delay = 0) {
           <div class="card-author-avatar">${content.author.initials}</div>
           <div class="card-author-info">
             <div class="author-name">${content.author.name}</div>
-            <div class="author-date">${timeAgo(content.date)}</div>
+            <div class="author-date">${timeAgo(content.date)}${content.lastEdited ? ' · Edited' : ''}</div>
           </div>
         </div>
         <div class="card-actions" onclick="event.stopPropagation()">
@@ -522,6 +587,58 @@ function renderContentCard(content, delay = 0) {
       </div>
     </div>
   `;
+}
+
+// --- Post Management ---
+function confirmDeletePost(postId) {
+  if (!document.getElementById('deleteConfirmModal')) {
+    const modal = document.createElement('div');
+    modal.id = 'deleteConfirmModal';
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+      <div class="modal" style="max-width:400px">
+        <div class="modal-header">
+          <h2><i data-lucide="alert-triangle"></i> Delete Post</h2>
+          <button class="modal-close" onclick="closeDeleteModal()"><i data-lucide="x"></i></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this post? This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="profile-btn profile-btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+          <button class="profile-btn" id="confirmDeleteBtn" style="background:#ef4444;color:#fff">Delete</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  document.getElementById('confirmDeleteBtn').onclick = function() {
+    state.deleteUserContent(postId);
+    closeDeleteModal();
+    showToast('Post deleted');
+    setTimeout(() => window.location.reload(), 300);
+  };
+  document.getElementById('deleteConfirmModal').classList.add('active');
+  refreshIcons();
+}
+
+function closeDeleteModal() {
+  const modal = document.getElementById('deleteConfirmModal');
+  if (modal) modal.classList.remove('active');
+}
+
+function togglePostPublish(postId) {
+  const post = state.togglePublishStatus(postId);
+  if (post) {
+    showToast(post.status === 'published' ? 'Post published' : 'Post moved to drafts');
+    setTimeout(() => window.location.reload(), 300);
+  }
+}
+
+function editPost(postId) {
+  const isInPages = window.location.pathname.includes('/pages/');
+  const base = isInPages ? '' : 'pages/';
+  window.location.href = `${base}upload.html?edit=${postId}`;
 }
 
 // --- Event Handlers ---
@@ -652,6 +769,7 @@ document.addEventListener('DOMContentLoaded', () => {
   state.applyTheme();
   setTimeout(initScrollFade, 100);
   refreshIcons();
+  if (typeof updateAuthUI === 'function') updateAuthUI();
 });
 
 // --- Firebase (non-intrusive analytics) ---

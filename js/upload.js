@@ -1,6 +1,7 @@
 /* ============================================
    HOWTOHUB — Upload / Content Creation Logic
    Dynamic form for 7 content types + real-time preview
+   Supports: custom hashtags, edit mode, rich text editor
    ============================================ */
 
 // --- State ---
@@ -12,6 +13,8 @@ let currentTags = [];
 let previewDebounceTimer = null;
 let audioRecorder = null;
 let audioChunks = [];
+let editingPostId = null;
+let quillEditor = null;
 
 // --- Content Type Definitions ---
 const CONTENT_TYPES = {
@@ -62,11 +65,89 @@ const CONTENT_TYPES = {
 // --- Initialize ---
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof state !== 'undefined') state.applyTheme();
+
+  // Check for edit mode
+  const urlParams = new URLSearchParams(window.location.search);
+  const editId = urlParams.get('edit');
+  if (editId && typeof state !== 'undefined') {
+    loadPostForEditing(parseInt(editId));
+  }
+
   renderTypeSelector();
   renderTemplateSelector();
-  switchType('blog');
+  if (!editingPostId) switchType('blog');
   refreshIcons();
 });
+
+// --- Edit Mode ---
+function loadPostForEditing(postId) {
+  const post = state.getContentById(postId);
+  if (!post || !state.isOwnContent(postId)) {
+    showToast('Post not found or not yours to edit');
+    return;
+  }
+
+  editingPostId = postId;
+
+  // Update page header
+  const header = document.querySelector('.upload-header h1');
+  if (header) header.innerHTML = '<i data-lucide="pencil"></i> Edit Post';
+  const subtitle = document.querySelector('.upload-subtitle');
+  if (subtitle) subtitle.textContent = 'Editing: ' + post.title;
+
+  // Update publish button
+  const publishBtn = document.querySelector('.upload-btn-primary');
+  if (publishBtn) publishBtn.innerHTML = '<i data-lucide="save"></i> Update Post';
+
+  // Set type
+  currentType = post.type || 'blog';
+  mediaUrls = post.media ? [...post.media] : [];
+  currentDirection = post.direction || 'left';
+  currentTags = post.tags ? [...post.tags] : [];
+
+  renderTypeSelector();
+  renderFormFields();
+
+  // Fill in form data after fields render
+  setTimeout(() => {
+    const titleInput = document.getElementById('fieldTitle');
+    if (titleInput) titleInput.value = post.title || '';
+
+    const coverInput = document.getElementById('fieldCoverImage');
+    if (coverInput) coverInput.value = post.coverImage || '';
+
+    // Handle body - check if rich text editor exists
+    if (quillEditor) {
+      // Strip HTML for Quill to render
+      quillEditor.root.innerHTML = post.body || '';
+    } else {
+      const bodyInput = document.getElementById('fieldBody');
+      if (bodyInput) {
+        // Strip HTML tags for plain text editing
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = post.body || '';
+        bodyInput.value = tempDiv.textContent || tempDiv.innerText || '';
+      }
+    }
+
+    const captionInput = document.getElementById('fieldCaption');
+    if (captionInput) {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = post.body || '';
+      captionInput.value = tempDiv.textContent || tempDiv.innerText || '';
+    }
+
+    const mediaInput = document.getElementById('fieldMediaUrl');
+    if (mediaInput && post.media && post.media.length > 0) {
+      mediaInput.value = post.media[0] || '';
+    }
+
+    updateMediaList();
+    updateTagDisplay();
+    updatePreview();
+    refreshIcons();
+  }, 100);
+}
 
 // --- Type Selector ---
 function renderTypeSelector() {
@@ -104,8 +185,10 @@ function renderTemplateSelector() {
 // --- Switch Content Type ---
 function switchType(type) {
   currentType = type;
-  mediaUrls = [];
-  currentDirection = 'left';
+  if (!editingPostId) {
+    mediaUrls = [];
+    currentDirection = 'left';
+  }
 
   // Update type buttons
   document.querySelectorAll('.type-btn').forEach(btn => {
@@ -137,11 +220,18 @@ function selectTemplate(key) {
   // Fill in template defaults
   setTimeout(() => {
     const titleInput = document.getElementById('fieldTitle');
-    const bodyInput = document.getElementById('fieldBody');
     const captionInput = document.getElementById('fieldCaption');
 
     if (titleInput && templateData.title) titleInput.value = templateData.title;
-    if (bodyInput && templateData.body) bodyInput.value = templateData.body;
+
+    // Set body via Quill or textarea
+    if (quillEditor && templateData.body) {
+      quillEditor.setText(templateData.body);
+    } else {
+      const bodyInput = document.getElementById('fieldBody');
+      if (bodyInput && templateData.body) bodyInput.value = templateData.body;
+    }
+
     if (captionInput && templateData.body) captionInput.value = templateData.body;
     if (templateData.direction) {
       currentDirection = templateData.direction;
@@ -207,12 +297,25 @@ function renderFormFields() {
         break;
 
       case 'body':
-        fieldsHtml += `
-          <div class="form-group">
-            <label for="fieldBody"><i data-lucide="align-left"></i> ${currentType === 'broadcast' ? 'Message' : 'Content'}</label>
-            <textarea id="fieldBody" rows="${currentType === 'broadcast' ? 4 : 10}" placeholder="${currentType === 'broadcast' ? 'Write your broadcast message...' : 'Write your content here...\n\nUse Step 1 — Title format for steps\nStart with Pro Tip: for tips\nStart with Warning: for warnings'}" oninput="debouncedPreview()"></textarea>
-          </div>
-        `;
+        if (currentType === 'broadcast') {
+          fieldsHtml += `
+            <div class="form-group">
+              <label for="fieldBody"><i data-lucide="align-left"></i> Message</label>
+              <textarea id="fieldBody" rows="4" placeholder="Write your broadcast message..." oninput="debouncedPreview()"></textarea>
+            </div>
+          `;
+        } else {
+          fieldsHtml += `
+            <div class="form-group">
+              <label><i data-lucide="align-left"></i> Content</label>
+              <div id="richEditorContainer">
+                <div id="richEditorToolbar"></div>
+                <div id="richEditor"></div>
+              </div>
+              <span class="field-hint">Use the toolbar to format your content</span>
+            </div>
+          `;
+        }
         break;
 
       case 'caption':
@@ -259,16 +362,16 @@ function renderFormFields() {
           <div class="form-group">
             <label for="fieldDirection"><i data-lucide="move"></i> Slide Direction</label>
             <div class="direction-selector">
-              <button type="button" class="direction-btn ${currentDirection === 'left' ? 'active' : ''}" onclick="setDirection('left')">
+              <button type="button" class="direction-btn ${currentDirection === 'left' ? 'active' : ''}" data-dir="left" onclick="setDirection('left')">
                 <i data-lucide="arrow-left"></i> Slide Left
               </button>
-              <button type="button" class="direction-btn ${currentDirection === 'right' ? 'active' : ''}" onclick="setDirection('right')">
+              <button type="button" class="direction-btn ${currentDirection === 'right' ? 'active' : ''}" data-dir="right" onclick="setDirection('right')">
                 <i data-lucide="arrow-right"></i> Slide Right
               </button>
-              <button type="button" class="direction-btn ${currentDirection === 'up' ? 'active' : ''}" onclick="setDirection('up')">
+              <button type="button" class="direction-btn ${currentDirection === 'up' ? 'active' : ''}" data-dir="up" onclick="setDirection('up')">
                 <i data-lucide="arrow-up"></i> Slide Up
               </button>
-              <button type="button" class="direction-btn ${currentDirection === 'down' ? 'active' : ''}" onclick="setDirection('down')">
+              <button type="button" class="direction-btn ${currentDirection === 'down' ? 'active' : ''}" data-dir="down" onclick="setDirection('down')">
                 <i data-lucide="arrow-down"></i> Slide Down
               </button>
             </div>
@@ -279,13 +382,19 @@ function renderFormFields() {
       case 'tags':
         fieldsHtml += `
           <div class="form-group">
-            <label><i data-lucide="tag"></i> Tags</label>
+            <label><i data-lucide="hash"></i> Hashtags</label>
             <div class="tags-input">
               <div class="tags-display" id="tagsDisplay"></div>
-              <div class="tags-options">
-                ${['Tech', 'Design', 'DIY', 'Education', 'Cooking', 'Fitness', 'Finance'].map(tag => `
-                  <button type="button" class="tag-option ${currentTags.includes(tag) ? 'active' : ''}" onclick="toggleTag('${tag}', this)">
-                    ${tag}
+              <div class="hashtag-input-row">
+                <span class="hashtag-prefix">#</span>
+                <input type="text" id="customTagInput" placeholder="Type a hashtag and press Enter..." maxlength="30" onkeydown="handleTagInputKey(event)">
+                <button type="button" class="btn-add-tag" onclick="addCustomTag()"><i data-lucide="plus"></i></button>
+              </div>
+              <div class="suggested-tags">
+                <span class="suggested-label">Suggested:</span>
+                ${['Tech', 'Design', 'DIY', 'Education', 'Cooking', 'Fitness', 'Finance', 'Photography', 'Travel', 'Music', 'Art', 'Science'].map(tag => `
+                  <button type="button" class="suggested-tag-btn ${currentTags.includes(tag) ? 'active' : ''}" onclick="toggleTag('${tag}', this)">
+                    #${tag}
                   </button>
                 `).join('')}
               </div>
@@ -335,7 +444,57 @@ function renderFormFields() {
   container.innerHTML = fieldsHtml;
   updateMediaList();
   updateTagDisplay();
+
+  // Initialize rich text editor for body field (not broadcast)
+  if (type.fields.includes('body') && currentType !== 'broadcast') {
+    initRichEditor();
+  }
+
   refreshIcons();
+}
+
+// --- Rich Text Editor (Quill) ---
+function initRichEditor() {
+  const editorEl = document.getElementById('richEditor');
+  if (!editorEl || typeof Quill === 'undefined') return;
+
+  quillEditor = new Quill('#richEditor', {
+    theme: 'snow',
+    placeholder: 'Write your content here...',
+    modules: {
+      toolbar: [
+        [{ 'header': [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        ['blockquote', 'code-block'],
+        ['link'],
+        [{ 'color': [] }, { 'background': [] }],
+        [{ 'align': [] }],
+        ['clean']
+      ]
+    }
+  });
+
+  quillEditor.on('text-change', function() {
+    debouncedPreview();
+  });
+}
+
+function getRichEditorContent() {
+  if (quillEditor) {
+    const html = quillEditor.root.innerHTML;
+    // Don't return empty editor content
+    if (html === '<p><br></p>' || html === '<p></p>') return '';
+    return html;
+  }
+  return '';
+}
+
+function getRichEditorText() {
+  if (quillEditor) {
+    return quillEditor.getText().trim();
+  }
+  return '';
 }
 
 // --- Media URL Management ---
@@ -397,24 +556,81 @@ function handleSingleMediaInput() {
 function setDirection(dir) {
   currentDirection = dir;
   document.querySelectorAll('.direction-btn').forEach(btn => {
-    const btnDir = btn.onclick.toString().match(/'(\w+)'/)?.[1];
-    btn.classList.toggle('active', btnDir === dir);
+    btn.classList.toggle('active', btn.dataset.dir === dir);
   });
   updatePreview();
 }
 
-// --- Tags ---
+// --- Custom Hashtag Support ---
+function handleTagInputKey(event) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    addCustomTag();
+  }
+}
+
+function addCustomTag() {
+  const input = document.getElementById('customTagInput');
+  if (!input) return;
+  let tag = input.value.trim();
+  if (!tag) return;
+
+  // Remove # prefix if user typed it
+  tag = tag.replace(/^#+/, '');
+  // Sanitize: alphanumeric, hyphens, underscores only
+  tag = tag.replace(/[^a-zA-Z0-9_-]/g, '');
+  if (!tag) {
+    showToast('Invalid hashtag');
+    return;
+  }
+
+  // Capitalize first letter
+  tag = tag.charAt(0).toUpperCase() + tag.slice(1);
+
+  if (currentTags.includes(tag)) {
+    showToast('Tag already added');
+    input.value = '';
+    return;
+  }
+
+  if (currentTags.length >= 10) {
+    showToast('Maximum 10 tags allowed');
+    return;
+  }
+
+  currentTags.push(tag);
+  input.value = '';
+  updateTagDisplay();
+  updateSuggestedTags();
+  debouncedPreview();
+}
+
 function toggleTag(tag, btn) {
   const idx = currentTags.indexOf(tag);
   if (idx >= 0) {
     currentTags.splice(idx, 1);
     if (btn) btn.classList.remove('active');
   } else {
+    if (currentTags.length >= 10) {
+      showToast('Maximum 10 tags allowed');
+      return;
+    }
     currentTags.push(tag);
     if (btn) btn.classList.add('active');
   }
   updateTagDisplay();
+  updateSuggestedTags();
   debouncedPreview();
+}
+
+function removeTag(tag) {
+  const idx = currentTags.indexOf(tag);
+  if (idx >= 0) {
+    currentTags.splice(idx, 1);
+    updateTagDisplay();
+    updateSuggestedTags();
+    debouncedPreview();
+  }
 }
 
 function updateTagDisplay() {
@@ -422,15 +638,22 @@ function updateTagDisplay() {
   if (!display) return;
 
   if (currentTags.length === 0) {
-    display.innerHTML = '<span class="tags-placeholder">Select tags below</span>';
+    display.innerHTML = '<span class="tags-placeholder">Add hashtags below</span>';
     return;
   }
 
   display.innerHTML = currentTags.map(tag =>
-    `<span class="tag-chip">${tag} <button type="button" onclick="toggleTag('${tag}')"><i data-lucide="x"></i></button></span>`
+    `<span class="tag-chip">#${tag} <button type="button" onclick="removeTag('${tag}')"><i data-lucide="x"></i></button></span>`
   ).join('');
 
   refreshIcons();
+}
+
+function updateSuggestedTags() {
+  document.querySelectorAll('.suggested-tag-btn').forEach(btn => {
+    const tag = btn.textContent.trim().replace('#', '');
+    btn.classList.toggle('active', currentTags.includes(tag));
+  });
 }
 
 // --- Broadcast Target ---
@@ -509,15 +732,19 @@ function updatePreview() {
 
 // --- Gather Form Data ---
 function getFormData() {
+  const bodyContent = quillEditor ? getRichEditorContent() : (document.getElementById('fieldBody')?.value?.trim() || '');
+  const bodyText = quillEditor ? getRichEditorText() : bodyContent;
+  const captionText = document.getElementById('fieldCaption')?.value?.trim() || '';
+
   return {
     type: currentType,
     title: document.getElementById('fieldTitle')?.value?.trim() || '',
-    body: document.getElementById('fieldBody')?.value?.trim() || document.getElementById('fieldCaption')?.value?.trim() || '',
+    body: bodyContent || captionText,
     coverImage: document.getElementById('fieldCoverImage')?.value?.trim() || '',
     media: [...mediaUrls],
     direction: currentDirection,
     tags: [...currentTags],
-    preview: (document.getElementById('fieldBody')?.value?.trim() || document.getElementById('fieldCaption')?.value?.trim() || '').substring(0, 120),
+    preview: (bodyText || captionText).substring(0, 120),
     broadcastTarget: document.querySelector('.broadcast-target-btn.active')?.textContent?.trim()?.includes('All') ? 'all' : 'selected'
   };
 }
@@ -533,10 +760,26 @@ function publishContent() {
     return;
   }
 
-  // Save
-  const post = contentStore.saveContent(data);
-
-  showToast('Content published successfully!');
+  if (editingPostId) {
+    // Update existing post
+    state.updateUserContent(editingPostId, {
+      type: data.type,
+      title: data.title,
+      preview: data.preview,
+      body: contentStore.formatBody(data.body, data.type),
+      media: data.media,
+      direction: data.direction,
+      coverImage: data.coverImage,
+      tags: data.tags,
+      broadcastTarget: data.broadcastTarget,
+      status: 'published'
+    });
+    showToast('Post updated successfully!');
+  } else {
+    // Save new post
+    contentStore.saveContent(data);
+    showToast('Content published successfully!');
+  }
 
   // Redirect to home after short delay
   setTimeout(() => {
@@ -553,8 +796,31 @@ function saveDraft() {
     return;
   }
 
-  contentStore.saveDraft(data);
-  showToast('Draft saved!');
+  if (editingPostId) {
+    // Save as draft for existing post
+    state.updateUserContent(editingPostId, {
+      type: data.type,
+      title: data.title || 'Untitled Draft',
+      preview: data.preview,
+      body: contentStore.formatBody(data.body, data.type),
+      media: data.media,
+      direction: data.direction,
+      coverImage: data.coverImage,
+      tags: data.tags,
+      status: 'draft'
+    });
+    showToast('Post saved as draft!');
+  } else {
+    // Save to drafts via contentStore
+    data.status = 'draft';
+    contentStore.saveContent(data);
+    showToast('Draft saved!');
+  }
+
+  setTimeout(() => {
+    const isInPages = window.location.pathname.includes('/pages/');
+    window.location.href = isInPages ? '../index.html' : 'index.html';
+  }, 1000);
 }
 
 // --- Clear Form ---
@@ -563,6 +829,8 @@ function clearForm() {
   currentTags = [];
   currentDirection = 'left';
   currentTemplate = null;
+  editingPostId = null;
+  if (quillEditor) quillEditor.setText('');
   renderFormFields();
   updatePreview();
   renderTemplateSelector();
