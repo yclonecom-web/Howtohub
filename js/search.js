@@ -86,8 +86,8 @@ function renderSearchResults(results, container) {
         <div class="search-result-item" onclick="openContent(${c.id})">
           <div class="result-icon" style="background: ${c.coverGradient}; color: #fff;"><i data-lucide="${c.coverIcon}"></i></div>
           <div class="result-info">
-            <h4>${highlightMatch(c.title, document.querySelector('.nav-search input, .bookmarks-search input, .mobile-search-header input')?.value || '')}</h4>
-            <p>${c.author.name} · ${(c.tags || []).join(', ')}</p>
+            <h4>${highlightMatch(escapeHtml(c.title), document.querySelector('.nav-search input, .bookmarks-search input, .mobile-search-header input')?.value || '')}</h4>
+            <p>${escapeHtml(c.author.name)} · ${(c.tags || []).map(t => escapeHtml(t)).join(', ')}</p>
           </div>
         </div>
       `;
@@ -98,11 +98,11 @@ function renderSearchResults(results, container) {
     html += '<div class="search-result-section">Users</div>';
     results.users.forEach(u => {
       html += `
-        <div class="search-result-item" onclick="navigateTo('profile.html?user=${u.username}')">
-          <div class="result-icon" style="background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; border-radius: 50%; font-size: 14px; font-weight: 700;">${u.initials}</div>
+        <div class="search-result-item" onclick="navigateTo('profile.html?user=${escapeHtml(u.username)}')">
+          <div class="result-icon" style="background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; border-radius: 50%; font-size: 14px; font-weight: 700;">${escapeHtml(u.initials)}</div>
           <div class="result-info">
-            <h4>${u.name}</h4>
-            <p>@${u.username} · ${formatNumber(u.followers)} followers</p>
+            <h4>${escapeHtml(u.name)}</h4>
+            <p>@${escapeHtml(u.username)} · ${formatNumber(u.followers)} followers</p>
           </div>
         </div>
       `;
@@ -179,8 +179,8 @@ function renderSuggestedContent() {
       <div class="search-result-item" onclick="openContent(${c.id})" style="border-bottom: 1px solid var(--border);">
         <div class="result-icon" style="background: ${c.coverGradient}; color: #fff;"><i data-lucide="${c.coverIcon}"></i></div>
         <div class="result-info">
-          <h4>${c.title}</h4>
-          <p>${formatNumber(c.views)} views · ${c.author.name}</p>
+          <h4>${escapeHtml(c.title)}</h4>
+          <p>${formatNumber(c.views)} views · ${escapeHtml(c.author.name)}</p>
         </div>
       </div>
     `;
