@@ -427,6 +427,18 @@ class AppState {
 const state = new AppState();
 
 // --- Utility Functions ---
+
+/**
+ * Escape HTML to prevent XSS when inserting user content into the DOM.
+ * Must be used on all user-controlled strings before innerHTML insertion.
+ */
+function escapeHtml(text) {
+  if (text == null) return '';
+  const div = document.createElement('div');
+  div.textContent = String(text);
+  return div.innerHTML;
+}
+
 function formatNumber(num) {
   if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
   if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
@@ -496,12 +508,12 @@ function renderContentCard(content, delay = 0) {
         <div class="card-tags">
           ${(content.tags || []).map(t => `<span class="tag ${getTagClass(t)}">${t}</span>`).join('')}
         </div>
-        <h3 class="card-title">${content.title}</h3>
-        <p class="card-preview">${content.preview}</p>
+        <h3 class="card-title">${escapeHtml(content.title)}</h3>
+        <p class="card-preview">${escapeHtml(content.preview)}</p>
         <div class="card-author">
-          <div class="card-author-avatar">${content.author.initials}</div>
+          <div class="card-author-avatar">${escapeHtml(content.author.initials)}</div>
           <div class="card-author-info">
-            <div class="author-name">${content.author.name}</div>
+            <div class="author-name">${escapeHtml(content.author.name)}</div>
             <div class="author-date">${timeAgo(content.date)}</div>
           </div>
         </div>
@@ -601,10 +613,10 @@ function submitNewContent() {
   }
 
   const content = state.addUserContent({
-    title,
-    preview,
+    title: escapeHtml(title),
+    preview: escapeHtml(preview),
     tags: tags ? [tags] : ['Education'],
-    body: body ? `<p>${body.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>')}</p>` : '<p>Content coming soon...</p>',
+    body: body ? `<p>${escapeHtml(body).replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>')}</p>` : '<p>Content coming soon...</p>',
     pinned: false,
     coverIcon: 'file-text'
   });
@@ -655,6 +667,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- Firebase (non-intrusive analytics) ---
+// NOTE: Firebase client-side config is intentionally public.
+// Security is enforced via Firebase Security Rules on the server,
+// not by hiding the config. Ensure restrictive rules are in place
+// in the Firebase Console to prevent unauthorized data access.
 (function initFirebase() {
   try {
     const script = document.createElement('script');

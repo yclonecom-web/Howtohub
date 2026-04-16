@@ -116,11 +116,13 @@ class ContentStore {
    */
   formatBody(text, type) {
     if (!text) return '';
+    // Escape user input before inserting into HTML to prevent XSS
+    const safe = typeof escapeHtml === 'function' ? escapeHtml(text) : text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     if (type === 'broadcast') {
-      return `<div class="broadcast-message"><p>${text.replace(/\n/g, '<br>')}</p></div>`;
+      return `<div class="broadcast-message"><p>${safe.replace(/\n/g, '<br>')}</p></div>`;
     }
     // Convert markdown-like formatting to HTML
-    return text.split('\n\n').map(para => {
+    return safe.split('\n\n').map(para => {
       if (para.match(/^(Step \d+|Part \d+|Tip \d+|Week \d+|Technique \d+)/)) {
         const [heading, ...rest] = para.split('\n');
         return `<div class="step-block"><div class="step-number">${heading}</div><p>${rest.join('<br>')}</p></div>`;
