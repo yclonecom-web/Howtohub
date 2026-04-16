@@ -269,7 +269,11 @@ h3 { font-size: 18px; font-weight: 600; line-height: 1.4; }
   color: var(--primary);
 }
 
-.bottom-nav a .nav-icon { font-size: 22px; }
+.bottom-nav a .nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 /* --- Search Results Dropdown --- */
 .search-results {
@@ -371,7 +375,6 @@ h3 { font-size: 18px; font-weight: 600; line-height: 1.4; }
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 48px;
   color: rgba(255,255,255,0.7);
 }
 
@@ -386,6 +389,9 @@ h3 { font-size: 18px; font-weight: 600; line-height: 1.4; }
   font-size: 11px;
   font-weight: 600;
   backdrop-filter: blur(4px);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .card-body {
@@ -508,7 +514,10 @@ h3 { font-size: 18px; font-weight: 600; line-height: 1.4; }
 .card-action-btn.liked { color: var(--danger); }
 .card-action-btn.saved { color: var(--accent); }
 
-.card-action-btn .action-icon { font-size: 18px; }
+.card-action-btn .action-icon {
+  display: inline-flex;
+  align-items: center;
+}
 
 /* --- Feed Layout --- */
 .feed-header {
@@ -551,6 +560,9 @@ h3 { font-size: 18px; font-weight: 600; line-height: 1.4; }
 }
 
 .filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   padding: 6px 16px;
   border-radius: 50px;
   font-size: 13px;
@@ -625,7 +637,6 @@ h3 { font-size: 18px; font-weight: 600; line-height: 1.4; }
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 72px;
   color: rgba(255,255,255,0.5);
   background: linear-gradient(135deg, var(--primary), var(--accent));
 }
@@ -939,6 +950,9 @@ h3 { font-size: 18px; font-weight: 600; line-height: 1.4; }
 }
 
 .comment-content .comment-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 12px;
   color: var(--text-muted);
   transition: color var(--transition);
@@ -1032,6 +1046,9 @@ h3 { font-size: 18px; font-weight: 600; line-height: 1.4; }
 }
 
 .profile-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 10px 24px;
   border-radius: 50px;
   font-size: 14px;
@@ -1067,6 +1084,9 @@ h3 { font-size: 18px; font-weight: 600; line-height: 1.4; }
 }
 
 .profile-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 14px 24px;
   font-size: 14px;
   font-weight: 600;
@@ -1248,6 +1268,9 @@ h3 { font-size: 18px; font-weight: 600; line-height: 1.4; }
 }
 
 .setting-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   padding: 8px 20px;
   border-radius: 50px;
   font-size: 13px;
@@ -1489,7 +1512,8 @@ h3 { font-size: 18px; font-weight: 600; line-height: 1.4; }
 }
 
 .empty-state .empty-icon {
-  font-size: 64px;
+  display: flex;
+  justify-content: center;
   margin-bottom: 16px;
   opacity: 0.5;
 }
@@ -1617,6 +1641,9 @@ h3 { font-size: 18px; font-weight: 600; line-height: 1.4; }
   }
 
   .desktop-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     padding: 8px 16px;
     border-radius: 50px;
     font-size: 14px;
@@ -2939,11 +2966,18 @@ h3 { font-size: 18px; font-weight: 600; line-height: 1.4; }
   color: var(--accent);
 }
 
-/* Cover / hero placeholder icons */
-.card-cover-placeholder .lucide,
-.content-hero-placeholder .lucide {
+/* Cover placeholder icons */
+.card-cover-placeholder .lucide {
   width: 48px;
   height: 48px;
+  stroke-width: 1.5;
+  color: rgba(255,255,255,0.9);
+}
+
+/* Hero placeholder icon (larger for 360px hero area) */
+.content-hero-placeholder .lucide {
+  width: 64px;
+  height: 64px;
   stroke-width: 1.5;
   color: rgba(255,255,255,0.9);
 }
@@ -2962,7 +2996,17 @@ h3 { font-size: 18px; font-weight: 600; line-height: 1.4; }
   color: var(--text-muted);
 }
 
-/* Section header icons */
+/* Section header icon alignment */
+.recommended-section h2,
+.pinned-section h3,
+.feed-header h1,
+.comments-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Section header icon sizing */
 .recommended-section h2 .lucide,
 .pinned-section h3 .lucide,
 .feed-header h1 .lucide {
@@ -3008,6 +3052,12 @@ h3 { font-size: 18px; font-weight: 600; line-height: 1.4; }
 }
 
 /* Settings about section icon */
+.settings-about-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
 .settings-about-icon .lucide {
   width: 36px;
   height: 36px;
