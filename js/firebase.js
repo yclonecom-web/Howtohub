@@ -91,7 +91,7 @@ class ContentStore {
       id: Date.now(),
       type: data.type || 'blog',
       title: data.title || 'Untitled Post',
-      preview: data.preview || data.body?.substring(0, 120) || '',
+      preview: data.preview || data.body?.substring(0, 120)?.replace(/<[^>]*>/g, '') || '',
       body: this.formatBody(data.body || '', data.type),
       media: data.media || [],
       direction: data.direction || 'left',
@@ -104,6 +104,7 @@ class ContentStore {
       comments: [],
       views: 0,
       pinned: false,
+      status: data.status || 'published',
       coverGradient: gradients[Math.floor(Math.random() * gradients.length)],
       coverIcon: iconMap[data.type] || 'file-text',
       broadcastTarget: data.broadcastTarget || 'all',
@@ -116,6 +117,10 @@ class ContentStore {
    */
   formatBody(text, type) {
     if (!text) return '';
+    // If content is already HTML (from rich text editor), return as-is
+    if (text.includes('<p>') || text.includes('<h1>') || text.includes('<h2>') || text.includes('<h3>') || text.includes('<ul>') || text.includes('<ol>') || text.includes('<blockquote>')) {
+      return text;
+    }
     if (type === 'broadcast') {
       return `<div class="broadcast-message"><p>${text.replace(/\n/g, '<br>')}</p></div>`;
     }
