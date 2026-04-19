@@ -17,6 +17,7 @@ export default function Home() {
     toggleFollow,
     isFollowing,
     getPinnedContent,
+    following,
   } = useApp();
   const [params, setParams] = useSearchParams();
   const [filter, setFilter] = useState('All');
@@ -47,17 +48,17 @@ export default function Home() {
     });
   }, [allContent, filter, search, getPinnedContent]);
 
-  const state = { likes, bookmarks, viewHistory, following: {} };
+  const state = { likes, bookmarks, viewHistory, following };
   const recommendations = useMemo(
     () => getRecommendations(allContent, state, { limit: 4 }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [allContent, likes, bookmarks, viewHistory],
+    [allContent, likes, bookmarks, viewHistory, following],
   );
   const trending = useMemo(() => getTrending(allContent, 4), [allContent]);
   const suggestedUsers = useMemo(
     () => getRecommendedUsers(allContent, users, state, 5),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [allContent, users, likes, bookmarks, viewHistory],
+    [allContent, users, likes, bookmarks, viewHistory, following],
   );
 
   return (

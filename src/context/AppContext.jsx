@@ -1,4 +1,12 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { CURRENT_USER_DEFAULT, SAMPLE_CONTENT, SAMPLE_USERS } from '../utils/sampleData.js';
 import { loadLocalPosts, subscribeToPosts } from '../services/api.js';
 
@@ -41,6 +49,7 @@ export function AppProvider({ children }) {
   );
   const [theme, setTheme] = useState(() => localStorage.getItem('howtohub_theme') || 'light');
   const [toast, setToast] = useState('');
+  const toastTimer = useRef(null);
 
   // Persist to localStorage whenever state changes
   useEffect(() => save('howtohub_likes', likes), [likes]);
@@ -68,8 +77,19 @@ export function AppProvider({ children }) {
 
   const showToast = useCallback((msg) => {
     setToast(msg);
-    setTimeout(() => setToast(''), 2500);
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => {
+      setToast('');
+      toastTimer.current = null;
+    }, 2500);
   }, []);
+
+  useEffect(
+    () => () => {
+      if (toastTimer.current) clearTimeout(toastTimer.current);
+    },
+    [],
+  );
 
   const toggleLike = useCallback((id) => {
     setLikes((prev) => {

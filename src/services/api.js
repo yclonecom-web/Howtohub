@@ -12,6 +12,7 @@ import {
   orderBy,
   query,
 } from './firebase.js';
+import { escapeHtml } from '../utils/helpers.js';
 
 const STORAGE_KEY = 'howtohub_user_content';
 const DRAFTS_KEY = 'howtohub_drafts';
@@ -122,26 +123,32 @@ const GRADIENTS = [
   'linear-gradient(135deg, #3730A3 0%, #A5B4FC 100%)',
 ];
 
+// Escape user text, then convert \n to <br>. Structural HTML tags around the
+// content are authored by us; only user-supplied strings are escaped.
+function escapeLines(text) {
+  return escapeHtml(text).replace(/\n/g, '<br>');
+}
+
 function formatBody(text, type) {
   if (!text) return '';
   if (type === 'broadcast')
-    return `<div class="broadcast-message"><p>${text.replace(/\n/g, '<br>')}</p></div>`;
+    return `<div class="broadcast-message"><p>${escapeLines(text)}</p></div>`;
   return text
     .split('\n\n')
     .map((para) => {
       if (/^(Step \d+|Part \d+|Tip \d+|Week \d+|Technique \d+)/.test(para)) {
         const [heading, ...rest] = para.split('\n');
-        return `<div class="step-block"><div class="step-number">${heading}</div><p>${rest.join('<br>')}</p></div>`;
+        return `<div class="step-block"><div class="step-number">${escapeHtml(heading)}</div><p>${escapeLines(rest.join('\n'))}</p></div>`;
       }
       if (para.startsWith('Pro Tip:') || para.startsWith('Tip:')) {
         const [first, ...rest] = para.split('\n');
-        return `<div class="tip-block"><strong>${first}</strong> ${rest.join('<br>')}</div>`;
+        return `<div class="tip-block"><strong>${escapeHtml(first)}</strong> ${escapeLines(rest.join('\n'))}</div>`;
       }
       if (para.startsWith('Warning:') || para.startsWith('Important:')) {
         const [first, ...rest] = para.split('\n');
-        return `<div class="warning-block"><strong>${first}</strong> ${rest.join('<br>')}</div>`;
+        return `<div class="warning-block"><strong>${escapeHtml(first)}</strong> ${escapeLines(rest.join('\n'))}</div>`;
       }
-      return `<p>${para.replace(/\n/g, '<br>')}</p>`;
+      return `<p>${escapeLines(para)}</p>`;
     })
     .join('\n');
 }
