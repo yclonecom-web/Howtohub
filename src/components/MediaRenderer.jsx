@@ -140,12 +140,15 @@ function DocumentRenderer({ src }) {
   );
 }
 
-function CoverFallback({ gradient, icon }) {
+function CoverFallback({ gradient, title, type }) {
   const style = gradient ? { background: gradient } : undefined;
+  const TypeIcon = type === 'video' ? Play : FileText;
   return (
-    <div className="media-cover" style={style} aria-hidden="true">
-      <FileText size={42} />
-      {icon ? <span className="sr-only">{icon}</span> : null}
+    <div className="media-cover" style={style} role="img" aria-label={title || 'Post cover'}>
+      <div className="media-cover-icon" aria-hidden="true">
+        <TypeIcon size={48} />
+      </div>
+      {title ? <div className="media-cover-title">{title}</div> : null}
     </div>
   );
 }
@@ -155,13 +158,17 @@ export default function MediaRenderer({
   media = [],
   direction = 'left',
   cover,
+  coverImage,
   title,
 }) {
   const list = Array.isArray(media) ? media.filter(Boolean) : [];
 
-  // No media — show cover fallback (used by blog posts with a gradient cover)
+  // No media — but if a coverImage URL was supplied, render it as a real <img>
+  // so blog/text posts still get a visible visual instead of a flat gradient.
   if (list.length === 0) {
-    if (cover?.gradient) return <CoverFallback gradient={cover.gradient} icon={cover.icon} />;
+    if (coverImage) return <ImageRenderer src={coverImage} alt={title} />;
+    if (cover?.gradient)
+      return <CoverFallback gradient={cover.gradient} title={title} type={type} />;
     return null;
   }
 

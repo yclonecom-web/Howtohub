@@ -92,6 +92,7 @@ export default function ContentDetail() {
             media={content.media || []}
             direction={content.direction || 'left'}
             cover={{ gradient: content.coverGradient, icon: content.coverIcon }}
+            coverImage={content.coverImage}
             title={content.title}
           />
         </div>

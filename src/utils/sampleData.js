@@ -29,6 +29,8 @@ export const SAMPLE_CONTENT = [
     pinned: true,
     coverGradient: 'linear-gradient(135deg, #1E3A8A 0%, #22D3EE 100%)',
     coverIcon: 'monitor',
+    coverImage:
+      'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1400',
     media: [],
     body: `
       <div class="step-block"><div class="step-number">Step 1 — Project Setup</div><p>Initialize your project with <code>npm init -y</code> and install dependencies: <code>npm install express mongoose dotenv cors helmet</code>. Create a clean folder structure with <code>/routes</code>, <code>/controllers</code>, <code>/models</code>, and <code>/middleware</code> directories.</p></div>
@@ -54,6 +56,8 @@ export const SAMPLE_CONTENT = [
     pinned: false,
     coverGradient: 'linear-gradient(135deg, #9D174D 0%, #F9A8D4 100%)',
     coverIcon: 'palette',
+    coverImage:
+      'https://images.unsplash.com/photo-1561070791-2526d30994b8?w=1400',
     direction: 'left',
     media: [
       'https://images.unsplash.com/photo-1561070791-2526d30994b8?w=1200',
@@ -78,6 +82,8 @@ export const SAMPLE_CONTENT = [
     pinned: false,
     coverGradient: 'linear-gradient(135deg, #92400E 0%, #FCD34D 100%)',
     coverIcon: 'hammer',
+    coverImage:
+      'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=1400',
     media: ['https://www.youtube.com/watch?v=dQw4w9WgXcQ'],
     body: '<p>Full video walkthrough. Follow along and build your workshop piece by piece.</p>',
   },
@@ -96,6 +102,8 @@ export const SAMPLE_CONTENT = [
     pinned: true,
     coverGradient: 'linear-gradient(135deg, #065F46 0%, #6EE7B7 100%)',
     coverIcon: 'bar-chart-3',
+    coverImage:
+      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400',
     media: [],
     body: `
       <div class="step-block"><div class="step-number">Step 1 — Environment Setup</div><p>Install Python 3.10+ and create a virtual environment. Install pandas, numpy, matplotlib, and seaborn. Use Jupyter notebooks for interactive exploration.</p></div>
@@ -117,6 +125,8 @@ export const SAMPLE_CONTENT = [
     pinned: false,
     coverGradient: 'linear-gradient(135deg, #991B1B 0%, #FCA5A5 100%)',
     coverIcon: 'utensils',
+    coverImage:
+      'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=1400',
     media: [
       'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=1400',
     ],
@@ -137,6 +147,8 @@ export const SAMPLE_CONTENT = [
     pinned: false,
     coverGradient: 'linear-gradient(135deg, #3730A3 0%, #A5B4FC 100%)',
     coverIcon: 'dumbbell',
+    coverImage:
+      'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1400',
     media: [
       'https://www.w3schools.com/html/horse.mp3',
     ],
@@ -157,6 +169,8 @@ export const SAMPLE_CONTENT = [
     pinned: false,
     coverGradient: 'linear-gradient(135deg, #047857 0%, #6EE7B7 100%)',
     coverIcon: 'wallet',
+    coverImage:
+      'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1400',
     direction: 'left',
     media: [
       'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',

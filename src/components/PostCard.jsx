@@ -61,6 +61,7 @@ export default function PostCard({ content }) {
           media={content.media || []}
           direction={direction || 'left'}
           cover={{ gradient: content.coverGradient, icon: content.coverIcon }}
+          coverImage={content.coverImage}
           title={title}
         />
       </div>
